@@ -2,7 +2,7 @@ package org.nowhere_lights.testframework.drivers.vars;
 
 public enum Environment {
     STAGING("staging"),
-    DEVELOPMENT("development");
+    TESTING("testing");
 
     private String environment;
 
@@ -25,7 +25,7 @@ public enum Environment {
                 return e;
             }
         }
-        return DEVELOPMENT;
+        return TESTING;
     }
 
 }

@@ -88,7 +88,7 @@ public class BaseTest extends Wrappers {
             e.printStackTrace();
         }
 
-        if (env == Environment.DEVELOPMENT) {
+        if (env == Environment.TESTING) {
             open(URL_DEV);
         } else if (env == Environment.STAGING) {
             open(URL_STG);
