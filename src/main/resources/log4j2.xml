@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Properties>
+        <Property name="project.name">selenium-test-framework</Property>
+        <Property name="logPath">build</Property>
+        <Property name="filename">${project.name}-run-tests</Property>
+        <Property name="pattern">%highlight{%d{yyyy:MM:dd | HH:mm:ss} [%t] [%-5level] %logger{36} - %msg%n}{FATAL=red blink,
+            ERROR=red, WARN=yellow bold, INFO=white, DEBUG=green bold, TRACE=blue}
+        </Property>
+    </Properties>
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern}"/>
+        </Console>
+        <RollingFile name="rollingFile" filename="${logPath}/${filename}.log"
+                     filePattern="${logPath}/${filename}_%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="${pattern}"/>
+            <Policies>
+                <OnStartUpTriggeringPolicy />
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="${project.name}" level="INFO">
+            <AppenderRef ref="rollingFile"/>
+        </Logger>
+        <Root level="INFO">
+            <AppenderRef ref="rollingFile"/>
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+    </Loggers>
+</Configuration>
