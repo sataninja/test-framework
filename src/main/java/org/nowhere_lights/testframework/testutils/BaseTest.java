@@ -29,7 +29,7 @@ public class BaseTest extends Wrappers {
 
     private static PropertiesContext propertiesContext = PropertiesContext.getInstance();
     private static final String DEFAULT_URL = null;
-    private static final String URL_DEV = propertiesContext.getProperty("urltest");
+    private static final String URL_TEST = propertiesContext.getProperty("urltest");
     private static final String URL_STG = propertiesContext.getProperty("urlstg");
     private static final String EMAIL_USERNAME = propertiesContext.getProperty("email.address");
     private static final String EMAIL_PASSWORD = propertiesContext.getProperty("email.password");
@@ -66,7 +66,8 @@ public class BaseTest extends Wrappers {
     @BeforeClass
     public static void connectToEmail() {
         try {
-            emailUtils = new EmailUtils(EMAIL_USERNAME, EMAIL_PASSWORD, EMAIL_SMTP_HOST, EmailUtils.EmailFolder.INBOX);
+            if (EMAIL_USERNAME == null || EMAIL_PASSWORD == null || EMAIL_SMTP_HOST == null)
+                emailUtils = new EmailUtils(EMAIL_USERNAME, EMAIL_PASSWORD, EMAIL_SMTP_HOST, EmailUtils.EmailFolder.INBOX);
         } catch (Exception e) {
             _logger.warn("No EMAIL Inbox specified");
         }
@@ -89,7 +90,7 @@ public class BaseTest extends Wrappers {
         }
 
         if (env == Environment.TESTING) {
-            open(URL_DEV);
+            open(URL_TEST);
         } else if (env == Environment.STAGING) {
             open(URL_STG);
         } else {

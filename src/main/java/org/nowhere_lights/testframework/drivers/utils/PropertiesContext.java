@@ -41,7 +41,7 @@ public class PropertiesContext {
         loadPropertiesFromClasspath(configMap, ALLURE_PROPERTIES);
         loadPropertiesFromClasspath(pagesMap, PAGES_PROPERTIES);
         loadPropertiesFromClasspath(emailMap, EMAIL_PROPERTIES);
-        loadGradleProperties(gradleMap);
+//        loadGradleProperties(gradleMap);
 
         generalMap.putAll(configMap);
         generalMap.putAll(pagesMap);
@@ -87,6 +87,13 @@ public class PropertiesContext {
             Reporter.log("Property " + key + " was not found (null)");
             return null;
         }
+    }
+
+    public void setProperty(String key, String value) {
+        if (value == null)
+            Reporter.log("Value is null");
+        if (key != null)
+            generalMap.setProperty(key, value);
     }
 
     public void clear() {
