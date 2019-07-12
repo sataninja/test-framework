@@ -16,6 +16,7 @@ import org.testng.ITestResult;
 import org.testng.annotations.*;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,20 +74,34 @@ public class BaseTest extends Wrappers {
         }
     }
 
+
+    /**
+     * WARNING!
+     *
+     * If one or more pages is broken for some reason, e.g. wrong path, then
+     * initializing process will fail causing one of the following exceptions
+     *
+     * */
     @BeforeMethod(alwaysRun = true)
     public void beforeMethod(final ITestContext testContext) {
         new WebDriverFactory().setWebDriver();
         softAssert = SoftAssert.getInstance(getWebDriver());
 
-        try {
-            for (Map.Entry<String, String> pageEntry : pageNames.entrySet()) {
+        for (Map.Entry<String, String> pageEntry : pageNames.entrySet()) {
+            try {
                 Class<?> clazz = Class.forName(pageEntry.getValue());
                 Constructor<?> constructor = clazz.getConstructor(WebDriver.class);
                 BasePage page = (BasePage) constructor.newInstance(getWebDriver());
                 pages.put(pageEntry.getKey(), page);
+            } catch (InstantiationException |
+                    InvocationTargetException |
+                    NoSuchMethodException |
+                    IllegalAccessException |
+                    ClassNotFoundException e) {
+                _logger.warn("Couldn't initialize page: " +
+                        pageEntry.getKey(), pageEntry.getValue(), e.getCause());
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         if (env == Environment.TESTING) {
