@@ -20,7 +20,7 @@ public class WebDriverFactory {
     public void setWebDriver() {
         if (browser == Browser.CHROME) {
             WebDriverManager.chromedriver().setup();
-            Configuration.browser = ChromeDriverDesktop.class.getName();
+            Configuration.browser = "chrome";
         } else if (browser == Browser.FIREFOX) {
             WebDriverManager.firefoxdriver().setup();
             Configuration.browser = "firefox";
@@ -30,11 +30,15 @@ public class WebDriverFactory {
         } else {
             clearBrowserCache();
             WebDriverManager.chromedriver().setup();
-            Configuration.browser = ChromeDriverDesktop.class.getName();
+            Configuration.browser = "chrome";
         }
 //        Configuration.browserPosition = "790x10";
 //        Configuration.browserSize = "375x812"; //iphone xs viewport
         Configuration.startMaximized = false;
         Configuration.timeout = 10000;
+        String remote = System.getenv("BROWSER_URL");
+        if (remote != null) {
+            Configuration.remote = remote;
+        }
     }
 }
