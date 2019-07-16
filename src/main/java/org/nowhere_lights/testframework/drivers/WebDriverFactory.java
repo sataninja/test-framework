@@ -36,5 +36,14 @@ public class WebDriverFactory {
 //        Configuration.browserSize = "375x812"; //iphone xs viewport
         Configuration.startMaximized = false;
         Configuration.timeout = 10000;
+        String remote = System.getenv("BROWSER_URL");
+        if (remote != null) {
+            Configuration.remote = remote;
+            if (browser == Browser.FIREFOX) {
+                Configuration.browser = "firefox";
+            } else {
+                Configuration.browser = "chrome";
+            }
+        }
     }
 }
