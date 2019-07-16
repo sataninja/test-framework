@@ -20,7 +20,7 @@ public class WebDriverFactory {
     public void setWebDriver() {
         if (browser == Browser.CHROME) {
             WebDriverManager.chromedriver().setup();
-            Configuration.browser = "chrome";
+            Configuration.browser = ChromeDriverDesktop.class.getName();
         } else if (browser == Browser.FIREFOX) {
             WebDriverManager.firefoxdriver().setup();
             Configuration.browser = "firefox";
@@ -30,7 +30,7 @@ public class WebDriverFactory {
         } else {
             clearBrowserCache();
             WebDriverManager.chromedriver().setup();
-            Configuration.browser = "chrome";
+            Configuration.browser = ChromeDriverDesktop.class.getName();
         }
 //        Configuration.browserPosition = "790x10";
 //        Configuration.browserSize = "375x812"; //iphone xs viewport
@@ -39,6 +39,11 @@ public class WebDriverFactory {
         String remote = System.getenv("BROWSER_URL");
         if (remote != null) {
             Configuration.remote = remote;
+            if (browser == Browser.FIREFOX) {
+                Configuration.browser = "firefox";
+            } else {
+                Configuration.browser = "chrome";
+            }
         }
     }
 }
