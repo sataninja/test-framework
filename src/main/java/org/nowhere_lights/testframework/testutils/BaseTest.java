@@ -67,7 +67,7 @@ public class BaseTest extends Wrappers {
     @BeforeClass
     public static void connectToEmail() {
         try {
-            if (EMAIL_USERNAME == null || EMAIL_PASSWORD == null || EMAIL_SMTP_HOST == null)
+            if (EMAIL_USERNAME != null && EMAIL_PASSWORD != null && EMAIL_SMTP_HOST != null)
                 emailUtils = new EmailUtils(EMAIL_USERNAME, EMAIL_PASSWORD, EMAIL_SMTP_HOST, EmailUtils.EmailFolder.INBOX);
         } catch (Exception e) {
             _logger.warn("No EMAIL Inbox specified");
@@ -104,14 +104,14 @@ public class BaseTest extends Wrappers {
             }
         }
 
-        if (env == Environment.TESTING) {
-            open(URL_TEST);
-        } else if (env == Environment.STAGING) {
-            open(URL_STG);
-        } else {
-            _logger.warn("No environment set, tests will run on: " + DEFAULT_URL);
-            open(DEFAULT_URL);
-        }
+//        if (env == Environment.TESTING) {
+//            open(URL_TEST);
+//        } else if (env == Environment.STAGING) {
+//            open(URL_STG);
+//        } else {
+//            _logger.warn("No environment set, tests will run on: " + DEFAULT_URL);
+//            open(DEFAULT_URL);
+//        }
         _logger.info(" [I] - Using " + env + " environment.");
     }
 

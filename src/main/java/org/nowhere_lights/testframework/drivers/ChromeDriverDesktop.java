@@ -17,6 +17,7 @@ public class ChromeDriverDesktop implements WebDriverProvider {
     public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
         desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, getChromeOptions());
         desiredCapabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+        desiredCapabilities.setCapability("enableVNC", true);
         return new ChromeDriver(desiredCapabilities);
     }
 
@@ -27,7 +28,8 @@ public class ChromeDriverDesktop implements WebDriverProvider {
         chromeOptions.addArguments("--disable-extensions");
 //        chromeOptions.addArguments("disable-native-notifications");
         chromeOptions.addArguments("--disable-infobars");
-        chromeOptions.addArguments("--start-fullscreen");
+//        chromeOptions.addArguments("--start-fullscreen");
+        chromeOptions.addArguments("--window-size=1920,1080");
         chromeOptions.addArguments("--disable-background-networking");
         chromeOptions.addArguments("--enable-push-api-background-mode");
         chromeOptions.addArguments("--enable-site-settings");

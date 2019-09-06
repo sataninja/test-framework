@@ -4,8 +4,9 @@ import com.codeborne.selenide.Configuration;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.nowhere_lights.testframework.drivers.vars.Browser;
 import org.nowhere_lights.testframework.drivers.utils.PropertiesContext;
+import org.nowhere_lights.testframework.drivers.vars.Browser;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.codeborne.selenide.WebDriverRunner.clearBrowserCache;
 
@@ -39,11 +40,15 @@ public class WebDriverFactory {
         String remote = System.getenv("BROWSER_URL");
         if (remote != null) {
             Configuration.remote = remote;
+            DesiredCapabilities chromeDesiredCapabilities = new DesiredCapabilities();
+            chromeDesiredCapabilities.setCapability("enableVNC", true);
+            Configuration.browserCapabilities = chromeDesiredCapabilities;
             if (browser == Browser.FIREFOX) {
                 Configuration.browser = "firefox";
             } else {
                 Configuration.browser = "chrome";
             }
+
         }
     }
 }
