@@ -8,15 +8,12 @@ import org.nowhere_lights.testframework.drivers.utils.PropertiesContext;
 import org.nowhere_lights.testframework.drivers.vars.Browser;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import static com.codeborne.selenide.WebDriverRunner.clearBrowserCache;
-
 
 public class WebDriverFactory {
 
+    public static final int DEFAULT_TIMEOUT = 15;
     private static final Logger _logger = LogManager.getLogger(WebDriverFactory.class.getSimpleName());
     private static Browser browser = Browser.toEnum(PropertiesContext.getInstance().getProperty("browser"));
-
-    public static final int DEFAULT_TIMEOUT = 15;
 
     public void setWebDriver() {
         if (browser == Browser.CHROME) {
@@ -29,12 +26,10 @@ public class WebDriverFactory {
             System.setProperty("firefoxprofile.dom.webnotifications.enabled", "false");
             System.setProperty("firefoxprofile.geo.enabled", "false");
         } else {
-            clearBrowserCache();
+            _logger.warn("No driver property found, using default browser");
             WebDriverManager.chromedriver().setup();
             Configuration.browser = ChromeDriverDesktop.class.getName();
         }
-//        Configuration.browserPosition = "790x10";
-//        Configuration.browserSize = "375x812"; //iphone xs viewport
         Configuration.startMaximized = false;
         Configuration.timeout = 10000;
         String remote = System.getenv("BROWSER_URL");
@@ -48,7 +43,8 @@ public class WebDriverFactory {
             } else {
                 Configuration.browser = "chrome";
             }
-
+        } else {
+            _logger.warn("Remote driver is not set.");
         }
     }
 }

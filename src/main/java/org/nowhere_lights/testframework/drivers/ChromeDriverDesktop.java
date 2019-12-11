@@ -17,7 +17,6 @@ public class ChromeDriverDesktop implements WebDriverProvider {
     public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
         desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, getChromeOptions());
         desiredCapabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-        desiredCapabilities.setCapability("enableVNC", true);
         return new ChromeDriver(desiredCapabilities);
     }
 
@@ -27,7 +26,7 @@ public class ChromeDriverDesktop implements WebDriverProvider {
         chromeOptions.addArguments("--disable-notifications");
         chromeOptions.addArguments("--disable-extensions");
 //        chromeOptions.addArguments("disable-native-notifications");
-        chromeOptions.addArguments("--disable-infobars");
+//        chromeOptions.addArguments("--disable-infobars"); //does not works properly with chrome 65+, replaced with 'enable-automation' option below
 //        chromeOptions.addArguments("--start-fullscreen");
         chromeOptions.addArguments("--window-size=1920,1080");
         chromeOptions.addArguments("--disable-background-networking");
@@ -37,12 +36,12 @@ public class ChromeDriverDesktop implements WebDriverProvider {
         Map<String, Object> chromePrefs = new HashMap<>();
         chromePrefs.put("profile.default_content_setting_values.geolocation", 2);
         chromePrefs.put("profile.default_content_setting_values.notifications", 2);
-
         chromePrefs.put("profile.default_content_settings.popups", 0);
         chromePrefs.put("download.default_directory", downloadFilepath);
         chromePrefs.put("webkit.webprefs.javascript_enabled", 0);
 
         chromeOptions.setExperimentalOption("prefs", chromePrefs);
+        chromeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
         return chromeOptions;
     }
 

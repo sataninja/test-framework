@@ -3,11 +3,12 @@ package org.nowhere_lights.testframework.testutils;
 import com.codeborne.selenide.testng.GlobalTextReport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.nowhere_lights.testframework.drivers.WaitDriver;
 import org.nowhere_lights.testframework.drivers.WebDriverFactory;
 import org.nowhere_lights.testframework.drivers.utils.EmailUtils;
 import org.nowhere_lights.testframework.drivers.utils.PropertiesContext;
-import org.nowhere_lights.testframework.drivers.vars.Environment;
 import org.nowhere_lights.testframework.drivers.utils.Wrappers;
+import org.nowhere_lights.testframework.drivers.vars.Environment;
 import org.nowhere_lights.testframework.pages.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
@@ -20,7 +21,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 @Listeners({TestMethodListener.class, GlobalTextReport.class, TestListener.class})
@@ -78,41 +78,36 @@ public class BaseTest extends Wrappers {
     /**
      * WARNING!
      *
+     * <p>
+     * <p>
      * If one or more pages is broken for some reason, e.g. wrong path, then
      * initializing process will fail causing one of the following exceptions
-     *
-     * */
+     * </p>
+     */
     @BeforeMethod(alwaysRun = true)
     public void beforeMethod(final ITestContext testContext) {
-        new WebDriverFactory().setWebDriver();
-        softAssert = SoftAssert.getInstance(getWebDriver());
-
-        for (Map.Entry<String, String> pageEntry : pageNames.entrySet()) {
-            try {
-                Class<?> clazz = Class.forName(pageEntry.getValue());
-                Constructor<?> constructor = clazz.getConstructor(WebDriver.class);
-                BasePage page = (BasePage) constructor.newInstance(getWebDriver());
-                pages.put(pageEntry.getKey(), page);
-            } catch (InstantiationException |
-                    InvocationTargetException |
-                    NoSuchMethodException |
-                    IllegalAccessException |
-                    ClassNotFoundException e) {
-                _logger.warn("Couldn't initialize page: " +
-                        pageEntry.getKey(), pageEntry.getValue(), e.getCause());
-                e.printStackTrace();
+        if (System.getenv("BROWSERSTACK_USERNAME") == null && System.getenv("BROWSERSTACK_ACCESS_KEY") == null) {
+            _logger.warn("No BrowserStack driver configured, setting desktop driver");
+            new WebDriverFactory().setWebDriver();
+            softAssert = SoftAssert.getInstance(getWebDriver());
+            for (Map.Entry<String, String> pageEntry : pageNames.entrySet()) {
+                try {
+                    Class<?> clazz = Class.forName(pageEntry.getValue());
+                    Constructor<?> constructor = clazz.getConstructor(WebDriver.class);
+                    BasePage page = (BasePage) constructor.newInstance(getWebDriver());
+                    pages.put(pageEntry.getKey(), page);
+                } catch (InstantiationException |
+                        InvocationTargetException |
+                        NoSuchMethodException |
+                        IllegalAccessException |
+                        ClassNotFoundException e) {
+                    _logger.warn("Couldn't initialize page: " +
+                            pageEntry.getKey(), pageEntry.getValue(), e.getCause());
+                    e.printStackTrace();
+                }
             }
+            _logger.info("Using " + env + " environment.");
         }
-
-//        if (env == Environment.TESTING) {
-//            open(URL_TEST);
-//        } else if (env == Environment.STAGING) {
-//            open(URL_STG);
-//        } else {
-//            _logger.warn("No environment set, tests will run on: " + DEFAULT_URL);
-//            open(DEFAULT_URL);
-//        }
-        _logger.info(" [I] - Using " + env + " environment.");
     }
 
     @AfterMethod(alwaysRun = true)
@@ -138,5 +133,9 @@ public class BaseTest extends Wrappers {
     @Override
     public WebDriver getDriver() {
         return getWebDriver();
+    }
+
+    public WaitDriver getWaitDriver() {
+        return WaitDriver.getInstance(getDriver());
     }
 }

@@ -39,14 +39,12 @@ public class PropertiesContext {
         loadPropertiesFromClasspath(configMap, ENV_PROPERTIES);
         loadPropertiesFromClasspath(configMap, USER_PROPERTIES);
         loadPropertiesFromClasspath(configMap, ALLURE_PROPERTIES);
-        loadPropertiesFromClasspath(pagesMap, PAGES_PROPERTIES);
-        loadPropertiesFromClasspath(emailMap, EMAIL_PROPERTIES);
+        loadPropertiesFromClasspath(configMap, PAGES_PROPERTIES);
+        loadPropertiesFromClasspath(configMap, EMAIL_PROPERTIES);
 //        loadGradleProperties(gradleMap);
 
         generalMap.putAll(configMap);
         generalMap.putAll(pagesMap);
-        generalMap.putAll(emailMap);
-        generalMap.putAll(gradleMap);
         if (System.getProperty("browser") != null) {
             generalMap.setProperty("browser", System.getProperty("browser"));
         }
@@ -94,6 +92,7 @@ public class PropertiesContext {
             Reporter.log("Value is null");
         if (key != null)
             generalMap.setProperty(key, value);
+        else Reporter.log("Key is null");
     }
 
     public void clear() {
