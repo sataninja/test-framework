@@ -90,24 +90,24 @@ public class BaseTest extends Wrappers {
             _logger.warn("No BrowserStack driver configured, setting desktop driver");
             new WebDriverFactory().setWebDriver();
             softAssert = SoftAssert.getInstance(getWebDriver());
-            for (Map.Entry<String, String> pageEntry : pageNames.entrySet()) {
-                try {
-                    Class<?> clazz = Class.forName(pageEntry.getValue());
-                    Constructor<?> constructor = clazz.getConstructor(WebDriver.class);
-                    BasePage page = (BasePage) constructor.newInstance(getWebDriver());
-                    pages.put(pageEntry.getKey(), page);
-                } catch (InstantiationException |
-                        InvocationTargetException |
-                        NoSuchMethodException |
-                        IllegalAccessException |
-                        ClassNotFoundException e) {
-                    _logger.warn("Couldn't initialize page: " +
-                            pageEntry.getKey(), pageEntry.getValue(), e.getCause());
-                    e.printStackTrace();
-                }
-            }
-            _logger.info("Using " + env + " environment.");
         }
+        for (Map.Entry<String, String> pageEntry : pageNames.entrySet()) {
+            try {
+                Class<?> clazz = Class.forName(pageEntry.getValue());
+                Constructor<?> constructor = clazz.getConstructor(WebDriver.class);
+                BasePage page = (BasePage) constructor.newInstance(getWebDriver());
+                pages.put(pageEntry.getKey(), page);
+            } catch (InstantiationException |
+                    InvocationTargetException |
+                    NoSuchMethodException |
+                    IllegalAccessException |
+                    ClassNotFoundException e) {
+                _logger.warn("Couldn't initialize page: " +
+                        pageEntry.getKey(), pageEntry.getValue(), e.getCause());
+                e.printStackTrace();
+            }
+        }
+        _logger.info("Using " + env + " environment.");
     }
 
     @AfterMethod(alwaysRun = true)

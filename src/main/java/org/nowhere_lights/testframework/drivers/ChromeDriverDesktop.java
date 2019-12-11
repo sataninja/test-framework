@@ -25,6 +25,7 @@ public class ChromeDriverDesktop implements WebDriverProvider {
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--disable-notifications");
         chromeOptions.addArguments("--disable-extensions");
+        chromeOptions.addArguments("--disable-web-security");
 //        chromeOptions.addArguments("disable-native-notifications");
 //        chromeOptions.addArguments("--disable-infobars"); //does not works properly with chrome 65+, replaced with 'enable-automation' option below
 //        chromeOptions.addArguments("--start-fullscreen");
@@ -37,6 +38,8 @@ public class ChromeDriverDesktop implements WebDriverProvider {
         chromePrefs.put("profile.default_content_setting_values.geolocation", 2);
         chromePrefs.put("profile.default_content_setting_values.notifications", 2);
         chromePrefs.put("profile.default_content_settings.popups", 0);
+        chromePrefs.put("credentials_enable_service", false); //blocks popup with Save Password
+        chromePrefs.put("profile.password_manager_enabled", false);
         chromePrefs.put("download.default_directory", downloadFilepath);
         chromePrefs.put("webkit.webprefs.javascript_enabled", 0);
 
