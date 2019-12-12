@@ -102,13 +102,17 @@ public class BaseTest extends Wrappers {
      * <p>
      * If one or more pages is broken for some reason, e.g. wrong path, then
      * initializing process will fail causing one of the following exceptions
-     * </p>
+     *
+     * @param environment is optional and belongs to BrowserStack and defines OS, browser etc. more info in config.json
+     *                    Also, config.json will be ignored in child test framework
+     *                    </p>
      */
     @BeforeMethod(alwaysRun = true)
     @Parameters(value = {"environment"})
     public void beforeMethod(final ITestContext testContext, @Optional String environment) throws Exception {
         _logger.info("<br>Starting test: " + testContext.getName());
         _logger.info("<br>****************************************************");
+        //setting browserstack run
         if (System.getenv("BROWSERSTACK_USERNAME") != null && System.getenv("BROWSERSTACK_ACCESS_KEY") != null) {
             JSONParser jsonParser = new JSONParser();
             JSONObject config = (JSONObject) jsonParser.parse(new FileReader(BROWSERSTACK_PATH));
@@ -157,6 +161,7 @@ public class BaseTest extends Wrappers {
             }
             _logger.info("Using " + environment + " environment.");
         }
+        //if browserstack is not set
         if (System.getenv("BROWSERSTACK_USERNAME") == null && System.getenv("BROWSERSTACK_ACCESS_KEY") == null) {
             _logger.warn("No BrowserStack driver configured, setting desktop driver");
             new WebDriverFactory().setWebDriver();
