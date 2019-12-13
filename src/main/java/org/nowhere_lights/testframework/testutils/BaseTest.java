@@ -1,12 +1,8 @@
 package org.nowhere_lights.testframework.testutils;
 
-import com.browserstack.local.Local;
-import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.testng.GlobalTextReport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.nowhere_lights.testframework.drivers.WaitDriver;
 import org.nowhere_lights.testframework.drivers.WebDriverFactory;
 import org.nowhere_lights.testframework.drivers.utils.EmailUtils;
@@ -15,22 +11,15 @@ import org.nowhere_lights.testframework.drivers.utils.Wrappers;
 import org.nowhere_lights.testframework.drivers.vars.Environment;
 import org.nowhere_lights.testframework.pages.BasePage;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
-import java.io.FileReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
@@ -39,6 +28,7 @@ public class BaseTest extends Wrappers {
 
     private static final Logger _logger = LogManager.getLogger(BaseTest.class.getSimpleName());
 
+    protected WebDriverFactory webDriverFactory = new WebDriverFactory();
     private static PropertiesContext propertiesContext = PropertiesContext.getInstance();
     private static final String DEFAULT_URL = null;
     private static final String URL_TEST = propertiesContext.getProperty("urltest");
@@ -54,15 +44,7 @@ public class BaseTest extends Wrappers {
     private static Environment env = Environment.toEnum(propertiesContext.getProperty("env"));
     protected static EmailUtils emailUtils;
     protected SoftAssert softAssert;
-    //browserstack
-    private static String username;
-    private static String accessKey;
-    private static String sessionId;
-    private Local local;
-    private static final String BROWSERSTACK_PATH = System.getProperty("user.dir") + "/src/main/resources/browserstack/config.json";
-    public RemoteWebDriver remoteWebDriver;
-
-    public Long suitStart, suitStop = 0L, elapsedTime;
+    public Long suiteStart, suiteStop = 0L, elapsedTime;
 
     private static Map<String, String> pageNames = propertiesContext
             .getPagesNames(propertiesContext.getPagesMap(), "pages");
@@ -77,8 +59,10 @@ public class BaseTest extends Wrappers {
         if (RETRY_ON)
             for (ITestNGMethod method : context.getAllTestMethods())
                 method.setRetryAnalyzer(new RetryAnalyzer());
-        suitStart = System.currentTimeMillis();
+        suiteStart = System.currentTimeMillis();
         if (System.getenv("BROWSERSTACK_USERNAME") == null && System.getenv("BROWSERSTACK_ACCESS_KEY") == null) {
+            _logger.info("<br>Setting browserstack driver: " + env.getValue());
+        } else {
             _logger.info("<br>Setting server: " + env.getValue());
             _logger.info("<br>Setting browser: " + PropertiesContext.getInstance().getProperty("browser"));
         }
@@ -94,7 +78,6 @@ public class BaseTest extends Wrappers {
         }
     }
 
-
     /**
      * WARNING!
      *
@@ -103,70 +86,16 @@ public class BaseTest extends Wrappers {
      * If one or more pages is broken for some reason, e.g. wrong path, then
      * initializing process will fail causing one of the following exceptions
      *
-     * @param environment is optional and belongs to BrowserStack and defines OS, browser etc. more info in config.json
-     *                    Also, config.json will be ignored in child test framework
-     *                    </p>
+     *
+     * </p>
      */
     @BeforeMethod(alwaysRun = true)
-    @Parameters(value = {"environment"})
-    public void beforeMethod(final ITestContext testContext, @Optional String environment) throws Exception {
+    public void beforeMethod(final ITestContext testContext) throws Exception {
         _logger.info("<br>Starting test: " + testContext.getName());
         _logger.info("<br>****************************************************");
-        //setting browserstack run
-        if (System.getenv("BROWSERSTACK_USERNAME") != null && System.getenv("BROWSERSTACK_ACCESS_KEY") != null) {
-            JSONParser jsonParser = new JSONParser();
-            JSONObject config = (JSONObject) jsonParser.parse(new FileReader(BROWSERSTACK_PATH));
-            JSONObject envs = (JSONObject) config.get("environments");
-
-            username = System.getenv("BROWSERSTACK_USERNAME");
-            if (username == null)
-                username = PropertiesContext.getInstance().getProperty("browserstackusername");
-            accessKey = System.getenv("BROWSERSTACK_ACCESS_KEY");
-            if (accessKey == null)
-                accessKey = PropertiesContext.getInstance().getProperty("browserstackaccesskey");
-
-            DesiredCapabilities capabilities = new DesiredCapabilities();
-
-            //browserstack config
-            Map<String, String> envCapabilities = (Map<String, String>) envs.get(environment);
-            Iterator it = envCapabilities.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry) it.next();
-                capabilities.setCapability(pair.getKey().toString(), pair.getValue().toString());
-            }
-
-            Map<String, String> commonCapabilities = (Map<String, String>) config.get("capabilities");
-            it = commonCapabilities.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry) it.next();
-                if (capabilities.getCapability(pair.getKey().toString()) == null) {
-                    capabilities.setCapability(pair.getKey().toString(), pair.getValue().toString());
-                }
-            }
-
-            if (capabilities.getCapability("browserstack.local") != null && capabilities.getCapability("browserstack.local") == "true") {
-                local = new Local();
-                Map<String, String> options = new HashMap<>();
-                options.put("key", accessKey);
-                local.start(options);
-            }
-            try {
-                remoteWebDriver = new RemoteWebDriver(
-                        new URL("http://" + username + ":" + accessKey + "@" + config.get("server") + "/wd/hub"), capabilities);
-                remoteWebDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-                sessionId = remoteWebDriver.getSessionId().toString();
-                WebDriverRunner.setWebDriver(remoteWebDriver);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-            _logger.info("Using " + environment + " environment.");
-        }
-        //if browserstack is not set
-        if (System.getenv("BROWSERSTACK_USERNAME") == null && System.getenv("BROWSERSTACK_ACCESS_KEY") == null) {
-            _logger.warn("No BrowserStack driver configured, setting desktop driver");
-            new WebDriverFactory().setWebDriver();
-            softAssert = SoftAssert.getInstance(getWebDriver());
-        }
+        webDriverFactory.setWebDriver();
+        softAssert = SoftAssert.getInstance(getWebDriver());
+        //pages initialize
         for (Map.Entry<String, String> pageEntry : pageNames.entrySet()) {
             try {
                 Class<?> clazz = Class.forName(pageEntry.getValue());
@@ -191,18 +120,15 @@ public class BaseTest extends Wrappers {
         _logger.info("<br>****************************************************");
         _logger.info("<br>Time taken by method " + iTestResult.getName() + ": " + (iTestResult.getEndMillis() - iTestResult.getStartMillis()) / 1000 + "sec");
         _logger.info("<br>****************************************************");
-        if (remoteWebDriver != null)
-            remoteWebDriver.quit();
-        if (local != null)
-            local.stop();
+        webDriverFactory.closeBrowserstack();
     }
 
     @AfterSuite
     public void afterSuite(final ITestContext iTestContext) {
-        String suitName = iTestContext.getSuite().getName();
-        suitStop = System.currentTimeMillis();
-        elapsedTime = (suitStop - suitStart) / 1000;
-        _logger.info("<br>Suit  " + suitName + " took " + elapsedTime + " seconds");
+        String suiteName = iTestContext.getSuite().getName();
+        suiteStop = System.currentTimeMillis();
+        elapsedTime = (suiteStop - suiteStart) / 1000;
+        _logger.info("<br>Suite  " + suiteName + " took " + elapsedTime + " seconds");
     }
 
     public SoftAssert getSoftAssert() {

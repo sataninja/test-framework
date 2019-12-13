@@ -16,6 +16,7 @@ public class PropertiesContext {
     private static final String EMAIL_PROPERTIES = "email";
     private static final String USER_PROPERTIES = "user";
     private static final String ALLURE_PROPERTIES = "allure";
+    private static final String BROWSERSTACK_PROPERTIES = "browserstack";
     private static PropertiesContext instance = new PropertiesContext();
     private Properties generalMap = new Properties();
     private Properties configMap = new Properties();
@@ -41,6 +42,7 @@ public class PropertiesContext {
         loadPropertiesFromClasspath(configMap, ALLURE_PROPERTIES);
         loadPropertiesFromClasspath(configMap, PAGES_PROPERTIES);
         loadPropertiesFromClasspath(configMap, EMAIL_PROPERTIES);
+        loadPropertiesFromClasspath(configMap, BROWSERSTACK_PROPERTIES);
 //        loadGradleProperties(gradleMap);
 
         generalMap.putAll(configMap);
@@ -57,12 +59,14 @@ public class PropertiesContext {
         if (System.getProperty("urlstg") != null) {
             generalMap.setProperty("urlstg", System.getProperty("urlstg"));
         }
+        //email props
         if (System.getProperty("email.address") != null) {
             generalMap.setProperty("email.address", System.getProperty("email.address"));
         }
         if (System.getProperty("email.password") != null) {
             generalMap.setProperty("email.password", System.getProperty("email.password"));
         }
+        //user test run
         if (System.getProperty("user.email.admin") != null) {
             generalMap.setProperty("user.email.admin", System.getProperty("user.email.admin"));
         }
@@ -74,6 +78,10 @@ public class PropertiesContext {
         }
         if (System.getProperty("user.password.member") != null) {
             generalMap.setProperty("user.password.member", System.getProperty("user.password.member"));
+        }
+        //browserstack
+        if (System.getProperty("bsbrowser") != null) {
+            generalMap.setProperty("bsbrowsers", System.getProperty("bsbrowser"));
         }
     }
 

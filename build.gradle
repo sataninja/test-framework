@@ -63,6 +63,9 @@ allure {
 }
 
 test {
+    useTestNG() {
+        preserveOrder = true
+    }
     systemProperty "browser", System.getProperty("browser")
     systemProperty "env", System.getProperty("env")
     systemProperty "urltest", System.getProperty("urltest")
@@ -74,7 +77,6 @@ test {
     systemProperty "user.email.member", System.getProperty("user.email.member")
     systemProperty "user.password.member", System.getProperty("user.password.member")
     systemProperty "retry", System.getProperty("retry")
-    useTestNG()
     maxParallelForks = 1
 }
 
