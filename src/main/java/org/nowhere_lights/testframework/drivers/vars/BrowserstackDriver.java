@@ -40,6 +40,8 @@ public class BrowserstackDriver {
         capabilities.setCapability("resolution", resolution);
         capabilities.setCapability("browserstack.debug", "true");
         capabilities.setCapability("browserstack.local", "true");
+        capabilities.setCapability("browserstack.networkLogs", "true");
+        capabilities.setCapability("browserstack.console", "errors");
         capabilities.setCapability("credentials_enable_service", "false");
 
         //setting local
