@@ -79,10 +79,6 @@ public class PropertiesContext {
         if (System.getProperty("user.password.member") != null) {
             generalMap.setProperty("user.password.member", System.getProperty("user.password.member"));
         }
-        //browserstack
-        if (System.getProperty("bsbrowser") != null) {
-            generalMap.setProperty("bsbrowsers", System.getProperty("bsbrowser"));
-        }
     }
 
     public String getProperty(String key) {

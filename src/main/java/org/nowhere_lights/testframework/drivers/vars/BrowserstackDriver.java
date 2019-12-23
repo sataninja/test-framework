@@ -31,12 +31,21 @@ public class BrowserstackDriver {
     public void createBrowserStackDriver() throws Exception {
         username = System.getenv("BROWSERSTACK_USERNAME");
         accessKey = System.getenv("BROWSERSTACK_ACCESS_KEY");
+        if (System.getenv("BSOS") != null)
+            PropertiesContext.getInstance().setProperty("bsos", System.getenv("BSOS"));
+        if (System.getenv("BSOS_VERSION") != null)
+            PropertiesContext.getInstance().setProperty("bsos_version", System.getenv("BSOS_VERSION"));
+        if (System.getenv("BSBROWSER") != null)
+            PropertiesContext.getInstance().setProperty("bsbrowser", System.getenv("BSBROWSER"));
+        if (System.getenv("BSBROWSER_VERSION") != null)
+            PropertiesContext.getInstance().setProperty("bsbrowser_version", System.getenv("BSBROWSER_VERSION"));
+
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("browsers", browser);
-        capabilities.setCapability("browser_version", browserVersion);
         capabilities.setCapability("os", os);
         capabilities.setCapability("os_version", osVersion);
+        capabilities.setCapability("browser", browser);
+        capabilities.setCapability("browser_version", browserVersion);
         capabilities.setCapability("resolution", resolution);
         capabilities.setCapability("browserstack.debug", "true");
         capabilities.setCapability("browserstack.local", "true");
