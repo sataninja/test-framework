@@ -60,6 +60,7 @@ public class BrowserstackDriver {
                 local.stop();
             Map<String, String> options = new HashMap<>();
             options.put("key", accessKey);
+            options.put("v", "3");
             local.start(options);
         }
         try {
