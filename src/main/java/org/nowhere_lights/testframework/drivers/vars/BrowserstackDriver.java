@@ -60,7 +60,9 @@ public class BrowserstackDriver {
                 local.stop();
             Map<String, String> options = new HashMap<>();
             options.put("key", accessKey);
-            options.put("v", "3");
+            if (System.getenv("BSLOCAL_BINARY") != null) {
+                options.put("binarypath", System.getenv("BSLOCAL_BINARY"));
+            }
             local.start(options);
         }
         try {
