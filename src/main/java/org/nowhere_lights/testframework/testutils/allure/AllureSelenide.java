@@ -48,22 +48,16 @@ public class AllureSelenide implements LogEventListener {
 
     @Override
     public void afterEvent(LogEvent currentLog) {
-        lifecycle.getCurrentTestCaseOrStep().ifPresent(parentUuid -> {
-            switch (currentLog.getStatus()) {
-                case PASS:
-                    lifecycle.updateStep(step -> step.setStatus(Status.PASSED));
-                case FAIL:
-                    lifecycle.addAttachment("Screenshot", "image/png", "png", getScreenShotBytes());
-                    lifecycle.addAttachment("Page source", "text/html", "html", getPageSourceBytes());
-                    lifecycle.updateStep(stepResult -> {
-                        final StatusDetails details = ResultsUtils.getStatusDetails(currentLog.getError())
-                                .orElse(new StatusDetails());
-                        stepResult.setStatus(Status.FAILED);
-                        stepResult.setStatusDetails(details);
-                    });
-                    break;
-            }
-        });
+        if (LogEvent.EventStatus.FAIL.equals(currentLog.getStatus())) {
+            lifecycle.addAttachment("Screenshot", "image/png", "png", getScreenShotBytes());
+            lifecycle.addAttachment("Page source", "text/html", "html", getPageSourceBytes());
+            lifecycle.updateStep(stepResult -> {
+                final StatusDetails details = ResultsUtils.getStatusDetails(currentLog.getError())
+                        .orElse(new StatusDetails());
+                stepResult.setStatus(Status.FAILED);
+                stepResult.setStatusDetails(details);
+            });
+        }
         lifecycle.stopStep();
     }
 

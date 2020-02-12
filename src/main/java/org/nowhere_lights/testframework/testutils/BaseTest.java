@@ -95,7 +95,6 @@ public class BaseTest extends Wrappers {
         if (System.getenv("BROWSERSTACK_USERNAME") != null && System.getenv("BROWSERSTACK_ACCESS_KEY") != null)
             propertiesContext.setProperty("bsname", testResult.getMethod().getDescription());
         webDriverFactory.setWebDriver();
-        softAssert = SoftAssert.getInstance(getWebDriver());
         //pages initialize
         for (Map.Entry<String, String> pageEntry : pageNames.entrySet()) {
             try {
@@ -113,6 +112,7 @@ public class BaseTest extends Wrappers {
                 e.printStackTrace();
             }
         }
+        softAssert = SoftAssert.getInstance(getDriver());
     }
 
     @AfterMethod(alwaysRun = true)
