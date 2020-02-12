@@ -1,4 +1,4 @@
-package org.nowhere_lights.testframework.testutils;
+package org.nowhere_lights.testframework;
 
 import com.codeborne.selenide.testng.GlobalTextReport;
 import org.apache.logging.log4j.LogManager;
@@ -10,6 +10,10 @@ import org.nowhere_lights.testframework.drivers.utils.PropertiesContext;
 import org.nowhere_lights.testframework.drivers.utils.Wrappers;
 import org.nowhere_lights.testframework.drivers.vars.Environment;
 import org.nowhere_lights.testframework.pages.BasePage;
+import org.nowhere_lights.testframework.testutils.RetryAnalyzer;
+import org.nowhere_lights.testframework.testutils.SoftAssert;
+import org.nowhere_lights.testframework.testutils.TestListener;
+import org.nowhere_lights.testframework.testutils.TestMethodListener;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
@@ -26,10 +30,9 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 @Listeners({TestMethodListener.class, GlobalTextReport.class, TestListener.class})
 public class BaseTest extends Wrappers {
 
-    private static final Logger _logger = LogManager.getLogger(BaseTest.class.getSimpleName());
-
-    protected WebDriverFactory webDriverFactory = new WebDriverFactory();
     private static PropertiesContext propertiesContext = PropertiesContext.getInstance();
+    private static Environment env = Environment.toEnum(propertiesContext.getProperty("env"));
+    private static final Logger _logger = LogManager.getLogger(BaseTest.class.getSimpleName());
     private static final String DEFAULT_URL = null;
     private static final String URL_TEST = propertiesContext.getProperty("urltest");
     private static final String URL_STG = propertiesContext.getProperty("urlstg");
@@ -41,13 +44,14 @@ public class BaseTest extends Wrappers {
     protected static final String USER_EMAIL_MEMBER = propertiesContext.getProperty("user.email.member");
     protected static final String USER_PASS_MEMBER = propertiesContext.getProperty("user.password.member");
     protected static final Boolean RETRY_ON = Boolean.valueOf(propertiesContext.getProperty("retry"));
-    private static Environment env = Environment.toEnum(propertiesContext.getProperty("env"));
     protected static EmailUtils emailUtils;
+    protected WebDriverFactory webDriverFactory = new WebDriverFactory();
     protected SoftAssert softAssert;
+    public String bsname;
     public Long suiteStart, suiteStop = 0L, elapsedTime;
 
-    private static Map<String, String> pageNames = propertiesContext
-            .getPagesNames(propertiesContext.getPagesMap(), "pages");
+    private static Map<String, String> pageNames = propertiesContext.getPagesNames(
+            propertiesContext.getPagesMap(), "pages");
     private static Map<String, BasePage> pages = new HashMap<>();
 
     protected static <T> T getPage(String pageName) {
@@ -90,9 +94,12 @@ public class BaseTest extends Wrappers {
      * </p>
      */
     @BeforeMethod(alwaysRun = true)
-    public void beforeMethod(final ITestContext testContext) throws Exception {
+    public void beforeMethod(final ITestContext testContext, ITestResult testResult) throws Exception {
         _logger.info("<br>Starting test: " + testContext.getName());
         _logger.info("<br>****************************************************");
+        if (System.getenv("BROWSERSTACK_USERNAME") != null && System.getenv("BROWSERSTACK_ACCESS_KEY") != null)
+            propertiesContext.setProperty("bsname", testResult.getMethod().getDescription());
+        bsname = testResult.getMethod().getDescription();
         webDriverFactory.setWebDriver();
         softAssert = SoftAssert.getInstance(getWebDriver());
         //pages initialize

@@ -1,6 +1,7 @@
 package org.nowhere_lights.testframework.testutils;
 
 
+import org.nowhere_lights.testframework.BaseTest;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.ITestClass;

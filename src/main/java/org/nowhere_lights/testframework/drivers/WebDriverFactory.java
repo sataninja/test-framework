@@ -1,12 +1,13 @@
 package org.nowhere_lights.testframework.drivers;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.nowhere_lights.testframework.drivers.utils.PropertiesContext;
 import org.nowhere_lights.testframework.drivers.vars.Browser;
-import org.nowhere_lights.testframework.drivers.vars.BrowserstackDriver;
+import org.nowhere_lights.testframework.testutils.allure.AllureSelenide;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 
@@ -53,6 +54,7 @@ public class WebDriverFactory {
                 _logger.warn("Remote driver is not set.");
             }
         }
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
     }
 
     public void closeBrowserstack() throws Exception {
