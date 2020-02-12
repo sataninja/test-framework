@@ -41,31 +41,29 @@ public class AllureSelenide implements LogEventListener {
         lifecycle.getCurrentTestCaseOrStep().ifPresent(parentUuid -> {
             final String uuid = UUID.randomUUID().toString();
             lifecycle.startStep(parentUuid, uuid, new StepResult()
-                    .setName(currentLog.toString())
-                    .setStatus(Status.PASSED));
+                    .setName(currentLog.toString()));
         });
+        lifecycle.updateStep(stepResult -> stepResult.setStart(stepResult.getStart() - currentLog.getDuration()));
     }
 
     @Override
     public void afterEvent(LogEvent currentLog) {
-//        lifecycle.getCurrentTestCase().ifPresent(uuid -> {
-//            final String stepUUID = UUID.randomUUID().toString();
-//            lifecycle.startStep(stepUUID, new StepResult()
-//                    .setName(currentLog.toString())
-//                    .withStatus(Status.PASSED));
-//        });
-        lifecycle.updateStep(stepResult -> stepResult.setStart(stepResult.getStart() - currentLog.getDuration()));
-
-        if (LogEvent.EventStatus.FAIL.equals(currentLog.getStatus())) {
-            lifecycle.addAttachment("Screenshot", "image/png", "png", getScreenShotBytes());
-            lifecycle.addAttachment("Page source", "text/html", "html", getPageSourceBytes());
-            lifecycle.updateStep(stepResult -> {
-                final StatusDetails details = ResultsUtils.getStatusDetails(currentLog.getError())
-                        .orElse(new StatusDetails());
-                stepResult.setStatus(Status.FAILED);
-                stepResult.setStatusDetails(details);
-            });
-        }
+        lifecycle.getCurrentTestCaseOrStep().ifPresent(parentUuid -> {
+            switch (currentLog.getStatus()) {
+                case PASS:
+                    lifecycle.updateStep(step -> step.setStatus(Status.PASSED));
+                case FAIL:
+                    lifecycle.addAttachment("Screenshot", "image/png", "png", getScreenShotBytes());
+                    lifecycle.addAttachment("Page source", "text/html", "html", getPageSourceBytes());
+                    lifecycle.updateStep(stepResult -> {
+                        final StatusDetails details = ResultsUtils.getStatusDetails(currentLog.getError())
+                                .orElse(new StatusDetails());
+                        stepResult.setStatus(Status.FAILED);
+                        stepResult.setStatusDetails(details);
+                    });
+                    break;
+            }
+        });
         lifecycle.stopStep();
     }
 

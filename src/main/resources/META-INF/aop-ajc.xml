@@ -1,0 +1,5 @@
+<aspectj>
+    <aspects>
+        <aspect name="com.idelic.safetysuite.tests.CustomAspect"/>
+    </aspects>
+</aspectj>
