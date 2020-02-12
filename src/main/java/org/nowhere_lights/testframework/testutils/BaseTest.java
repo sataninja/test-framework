@@ -1,4 +1,4 @@
-package org.nowhere_lights.testframework;
+package org.nowhere_lights.testframework.testutils;
 
 import com.codeborne.selenide.testng.GlobalTextReport;
 import org.apache.logging.log4j.LogManager;
@@ -10,10 +10,6 @@ import org.nowhere_lights.testframework.drivers.utils.PropertiesContext;
 import org.nowhere_lights.testframework.drivers.utils.Wrappers;
 import org.nowhere_lights.testframework.drivers.vars.Environment;
 import org.nowhere_lights.testframework.pages.BasePage;
-import org.nowhere_lights.testframework.testutils.RetryAnalyzer;
-import org.nowhere_lights.testframework.testutils.SoftAssert;
-import org.nowhere_lights.testframework.testutils.TestListener;
-import org.nowhere_lights.testframework.testutils.TestMethodListener;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;

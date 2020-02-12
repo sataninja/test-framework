@@ -1,7 +1,6 @@
 package org.nowhere_lights.testframework.testutils;
 
 
-import org.nowhere_lights.testframework.BaseTest;
 import org.nowhere_lights.testframework.drivers.utils.ReportURL;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
