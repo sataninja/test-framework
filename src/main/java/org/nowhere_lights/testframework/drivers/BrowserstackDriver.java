@@ -4,7 +4,6 @@ import com.browserstack.local.Local;
 import com.codeborne.selenide.WebDriverRunner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.nowhere_lights.testframework.BaseTest;
 import org.nowhere_lights.testframework.drivers.utils.PropertiesContext;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -18,23 +17,22 @@ import java.util.concurrent.TimeUnit;
 public class BrowserstackDriver {
 
     private static final Logger _logger = LogManager.getLogger(BrowserstackDriver.class.getSimpleName());
-    private static String username = System.getenv("BROWSERSTACK_USERNAME");
-    private static String accessKey = System.getenv("BROWSERSTACK_ACCESS_KEY");
-    private static String browser = PropertiesContext.getInstance().getProperty("bsbrowser");
-    private static String browserVersion = PropertiesContext.getInstance().getProperty("bsbrowser_version");
-    private static String os = PropertiesContext.getInstance().getProperty("bsos");
-    private static String osVersion = PropertiesContext.getInstance().getProperty("bsos_version");
-    private static String resolution = PropertiesContext.getInstance().getProperty("bsresolution");
-    private static String project = PropertiesContext.getInstance().getProperty("bsproject");
-    private static String build = PropertiesContext.getInstance().getProperty("bsbuild");
-    private static String name = PropertiesContext.getInstance().getProperty("bsname");
     private RemoteWebDriver remoteWebDriver;
     private Local local;
     private String sessionId;
 
     public void createBrowserStackDriver() throws Exception {
-        username = System.getenv("BROWSERSTACK_USERNAME");
-        accessKey = System.getenv("BROWSERSTACK_ACCESS_KEY");
+        String username = System.getenv("BROWSERSTACK_USERNAME");
+        String accessKey = System.getenv("BROWSERSTACK_ACCESS_KEY");
+        String os = PropertiesContext.getInstance().getProperty("bsos");
+        String osVersion = PropertiesContext.getInstance().getProperty("bsos_version");
+        String browser = PropertiesContext.getInstance().getProperty("bsbrowser");
+        String browserVersion = PropertiesContext.getInstance().getProperty("bsbrowser_version");
+        String resolution = PropertiesContext.getInstance().getProperty("bsresolution");
+        String project = PropertiesContext.getInstance().getProperty("bsproject");
+        String build = PropertiesContext.getInstance().getProperty("bsbuild");
+        String name = PropertiesContext.getInstance().getProperty("bsname");
+
         if (System.getenv("BSOS") != null)
             PropertiesContext.getInstance().setProperty("bsos", System.getenv("BSOS"));
         if (System.getenv("BSOS_VERSION") != null)
@@ -43,6 +41,8 @@ public class BrowserstackDriver {
             PropertiesContext.getInstance().setProperty("bsbrowser", System.getenv("BSBROWSER"));
         if (System.getenv("BSBROWSER_VERSION") != null)
             PropertiesContext.getInstance().setProperty("bsbrowser_version", System.getenv("BSBROWSER_VERSION"));
+        if (System.getenv("BSRESOLUTION") !=null)
+            PropertiesContext.getInstance().setProperty("bsresolution", System.getenv("BSRESOLUTION"));
         if (System.getenv("BSPROJECT") != null)
             PropertiesContext.getInstance().setProperty("bsproject", System.getenv("BSPROJECT"));
         if (System.getenv("BSBUILD") != null)

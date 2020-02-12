@@ -47,7 +47,6 @@ public class BaseTest extends Wrappers {
     protected static EmailUtils emailUtils;
     protected WebDriverFactory webDriverFactory = new WebDriverFactory();
     protected SoftAssert softAssert;
-    public String bsname;
     public Long suiteStart, suiteStop = 0L, elapsedTime;
 
     private static Map<String, String> pageNames = propertiesContext.getPagesNames(
@@ -99,7 +98,6 @@ public class BaseTest extends Wrappers {
         _logger.info("<br>****************************************************");
         if (System.getenv("BROWSERSTACK_USERNAME") != null && System.getenv("BROWSERSTACK_ACCESS_KEY") != null)
             propertiesContext.setProperty("bsname", testResult.getMethod().getDescription());
-        bsname = testResult.getMethod().getDescription();
         webDriverFactory.setWebDriver();
         softAssert = SoftAssert.getInstance(getWebDriver());
         //pages initialize
