@@ -100,7 +100,7 @@ public class BaseTest extends Wrappers {
             try {
                 Class<?> clazz = Class.forName(pageEntry.getValue());
                 Constructor<?> constructor = clazz.getConstructor(WebDriver.class);
-                BasePage page = (BasePage) constructor.newInstance(getWebDriver());
+                BasePage page = (BasePage) constructor.newInstance(getDriver());
                 pages.put(pageEntry.getKey(), page);
             } catch (InstantiationException |
                     InvocationTargetException |

@@ -29,7 +29,7 @@ clean.doFirst {
 dependencies {
     implementation('io.qameta.allure:allure-okhttp3:2.10.0')
     compile 'io.rest-assured:rest-assured:3.1.1'
-    compile("io.github.bonigarcia:webdrivermanager:3.1.1")
+    compile("io.github.bonigarcia:webdrivermanager:3.7.1")
     compile group: 'com.codeborne', name: 'selenide', version: '5.7.0'
     compile group: 'org.awaitility', name: 'awaitility', version: '3.1.6'
     compile group: 'javax.mail', name: 'javax.mail-api', version: '1.6.0'
