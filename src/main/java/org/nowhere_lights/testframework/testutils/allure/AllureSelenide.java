@@ -36,18 +36,41 @@ public class AllureSelenide implements LogEventListener {
         return getWebDriver().getPageSource().getBytes(StandardCharsets.UTF_8);
     }
 
+    //actual for selenide 5.7.0 which causes the java.lang.IllegalStateException bug
+//    @Override
+//    public void beforeEvent(LogEvent currentLog) {
+//        lifecycle.getCurrentTestCaseOrStep().ifPresent(parentUuid -> {
+//            final String uuid = UUID.randomUUID().toString();
+//            lifecycle.startStep(parentUuid, uuid, new StepResult()
+//                    .setName(currentLog.toString()));
+//        });
+//        lifecycle.updateStep(stepResult -> stepResult.setStart(stepResult.getStart() - currentLog.getDuration()));
+//    }
+//
+//    @Override
+//    public void afterEvent(LogEvent currentLog) {
+//        if (LogEvent.EventStatus.FAIL.equals(currentLog.getStatus())) {
+//            lifecycle.addAttachment("Screenshot", "image/png", "png", getScreenShotBytes());
+//            lifecycle.addAttachment("Page source", "text/html", "html", getPageSourceBytes());
+//            lifecycle.updateStep(stepResult -> {
+//                final StatusDetails details = ResultsUtils.getStatusDetails(currentLog.getError())
+//                        .orElse(new StatusDetails());
+//                stepResult.setStatus(Status.FAILED);
+//                stepResult.setStatusDetails(details);
+//            });
+//        }
+//        lifecycle.stopStep();
+//    }
+
+    //actual for selenide 4
     @Override
-    public void beforeEvent(LogEvent currentLog) {
+    public void onEvent(LogEvent currentLog) {
         lifecycle.getCurrentTestCaseOrStep().ifPresent(parentUuid -> {
             final String uuid = UUID.randomUUID().toString();
             lifecycle.startStep(parentUuid, uuid, new StepResult()
                     .setName(currentLog.toString()));
         });
         lifecycle.updateStep(stepResult -> stepResult.setStart(stepResult.getStart() - currentLog.getDuration()));
-    }
-
-    @Override
-    public void afterEvent(LogEvent currentLog) {
         if (LogEvent.EventStatus.FAIL.equals(currentLog.getStatus())) {
             lifecycle.addAttachment("Screenshot", "image/png", "png", getScreenShotBytes());
             lifecycle.addAttachment("Page source", "text/html", "html", getPageSourceBytes());
@@ -60,5 +83,4 @@ public class AllureSelenide implements LogEventListener {
         }
         lifecycle.stopStep();
     }
-
 }
