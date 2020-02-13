@@ -1,4 +1,4 @@
-package org.nowhere_lights.testframework.testutils;
+package org.nowhere_lights.testframework.testutils.allure;
 
 import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.LogEventListener;

@@ -1,5 +1,5 @@
 <aspectj>
     <aspects>
-        <aspect name="com.idelic.safetysuite.tests.CustomAspect"/>
+        <aspect name="org.nowhere_lights.testframework.testutils.allure.CustomAspect"/>
     </aspects>
 </aspectj>
