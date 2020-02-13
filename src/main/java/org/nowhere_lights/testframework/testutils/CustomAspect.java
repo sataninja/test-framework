@@ -1,4 +1,4 @@
-package org.nowhere_lights.testframework.testutils.allure;
+package org.nowhere_lights.testframework.testutils;
 
 import io.qameta.allure.Allure;
 import io.qameta.allure.AllureLifecycle;
@@ -44,8 +44,8 @@ public class CustomAspect {
             return proceed;
         } catch (Throwable e) {
             getLifecycle().updateStep(uuid, s -> s
-                    .withStatus(getStatus(e).orElse(Status.BROKEN))
-                    .withStatusDetails(getStatusDetails(e).orElse(null)));
+                    .setStatus(getStatus(e).orElse(Status.BROKEN))
+                    .setStatusDetails(getStatusDetails(e).orElse(null)));
             throw e;
         } finally {
             getLifecycle().stopStep(uuid);

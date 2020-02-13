@@ -92,8 +92,14 @@ public class BaseTest extends Wrappers {
     public void beforeMethod(final ITestContext testContext, ITestResult testResult) throws Exception {
         _logger.info("<br>Starting test: " + testContext.getName());
         _logger.info("<br>****************************************************");
-        if (System.getenv("BROWSERSTACK_USERNAME") != null && System.getenv("BROWSERSTACK_ACCESS_KEY") != null)
-            propertiesContext.setProperty("bsname", testResult.getMethod().getDescription());
+        if (System.getenv("BROWSERSTACK_USERNAME") != null && System.getenv("BROWSERSTACK_ACCESS_KEY") != null) {
+            try {
+                propertiesContext.setProperty("bsname", testResult.getMethod().getDescription());
+            } catch (NullPointerException ignored) {
+                propertiesContext.setProperty("bsname", testResult.getMethod().getMethodName());
+            }
+        }
+
         webDriverFactory.setWebDriver();
         //pages initialize
         for (Map.Entry<String, String> pageEntry : pageNames.entrySet()) {

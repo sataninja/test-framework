@@ -7,7 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.nowhere_lights.testframework.drivers.utils.PropertiesContext;
 import org.nowhere_lights.testframework.drivers.vars.Browser;
-import org.nowhere_lights.testframework.testutils.allure.AllureSelenide;
+import org.nowhere_lights.testframework.testutils.AllureSelenide;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 
