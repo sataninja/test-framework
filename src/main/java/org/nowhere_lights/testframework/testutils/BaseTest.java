@@ -21,6 +21,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 @Listeners({TestMethodListener.class, GlobalTextReport.class, TestListener.class})
@@ -101,6 +102,7 @@ public class BaseTest extends Wrappers {
         }
 
         webDriverFactory.setWebDriver();
+        open(PropertiesContext.getInstance().getProperty("urltest"));
         //pages initialize
         for (Map.Entry<String, String> pageEntry : pageNames.entrySet()) {
             try {

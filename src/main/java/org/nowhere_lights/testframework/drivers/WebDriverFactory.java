@@ -10,6 +10,8 @@ import org.nowhere_lights.testframework.drivers.vars.Browser;
 import org.nowhere_lights.testframework.testutils.allure.AllureSelenide;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import static com.codeborne.selenide.Selenide.open;
+
 
 public class WebDriverFactory {
 
@@ -55,6 +57,7 @@ public class WebDriverFactory {
             }
         }
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
+        open(PropertiesContext.getInstance().getProperty("urltest"));
     }
 
     public void closeBrowserstack() throws Exception {
