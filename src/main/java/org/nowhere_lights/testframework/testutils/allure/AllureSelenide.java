@@ -50,9 +50,7 @@ public class AllureSelenide implements LogEventListener {
     public void afterEvent(LogEvent currentLog) {
         lifecycle.getCurrentTestCase().ifPresent(uuid -> {
             if (LogEvent.EventStatus.PASS.equals(currentLog.getStatus())) {
-                final String stepUuid = UUID.randomUUID().toString();
-                lifecycle.startStep(stepUuid, new StepResult()
-                        .setStatus(Status.PASSED));
+                lifecycle.updateStep(stepResult -> stepResult.setStatus(Status.PASSED));
             }
             lifecycle.updateStep(stepResult -> stepResult.setStart(stepResult.getStart() - currentLog.getDuration()));
             if (LogEvent.EventStatus.FAIL.equals(currentLog.getStatus())) {
