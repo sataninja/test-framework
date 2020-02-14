@@ -49,11 +49,10 @@ public class AllureSelenide implements LogEventListener {
     @Override
     public void afterEvent(LogEvent currentLog) {
         lifecycle.getCurrentTestCase().ifPresent(uuid -> {
+            lifecycle.updateStep(stepResult -> stepResult.setStop(stepResult.getStop()));
             if (LogEvent.EventStatus.PASS.equals(currentLog.getStatus())) {
                 lifecycle.updateStep(stepResult -> stepResult.setStatus(Status.PASSED));
-            }
-            lifecycle.updateStep(stepResult -> stepResult.setStart(stepResult.getStart() - currentLog.getDuration()));
-            if (LogEvent.EventStatus.FAIL.equals(currentLog.getStatus())) {
+            } else if (LogEvent.EventStatus.FAIL.equals(currentLog.getStatus())) {
                 lifecycle.addAttachment("Screenshot", "image/png", "png", getScreenShotBytes());
                 lifecycle.addAttachment("Page source", "text/html", "html", getPageSourceBytes());
                 lifecycle.updateStep(stepResult -> {
@@ -62,6 +61,10 @@ public class AllureSelenide implements LogEventListener {
                     stepResult.setStatus(Status.FAILED);
                     stepResult.setStatusDetails(details);
                 });
+            } else {
+                lifecycle.updateStep(stepResult -> stepResult
+                        .setStatus(Status.BROKEN)
+                        .setStatusDetails(ResultsUtils.getStatusDetails(currentLog.getError()).orElse(null)));
             }
             lifecycle.stopStep();
         });

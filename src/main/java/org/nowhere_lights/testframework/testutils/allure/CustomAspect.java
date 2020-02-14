@@ -40,7 +40,7 @@ public class CustomAspect {
         getLifecycle().startStep(uuid, result);
         try {
             final Object proceed = joinPoint.proceed();
-            getLifecycle().updateStep(uuid, s -> s.withStatus(Status.PASSED));
+            getLifecycle().updateStep(uuid, s -> s.setStatus(Status.PASSED));
             return proceed;
         } catch (Throwable e) {
             getLifecycle().updateStep(uuid, s -> s
