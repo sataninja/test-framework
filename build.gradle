@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "io.qameta.allure:allure-gradle:2.3"
+        classpath "io.qameta.allure:allure-gradle:2.8.1"
     }
 }
 
@@ -57,10 +57,10 @@ dependencies {
 }
 
 allure {
-    version = '2.10.0'
+    version = '2.9.0'
     autoconfigure = true
     aspectjweaver = true
-    allureJavaVersion = '2.0-BETA9'
+    allureJavaVersion = '2.0-BETA10'
     downloadLinkFormat = 'https://dl.bintray.com/qameta/maven/io/qameta/allure/allure-commandline/%s/allure-commandline-%<s.zip'
 }
 
