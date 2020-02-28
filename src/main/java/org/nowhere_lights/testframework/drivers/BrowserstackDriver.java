@@ -41,7 +41,7 @@ public class BrowserstackDriver {
             PropertiesContext.getInstance().setProperty("bsbrowser", System.getenv("BSBROWSER"));
         if (System.getenv("BSBROWSER_VERSION") != null)
             PropertiesContext.getInstance().setProperty("bsbrowser_version", System.getenv("BSBROWSER_VERSION"));
-        if (System.getenv("BSRESOLUTION") !=null)
+        if (System.getenv("BSRESOLUTION") != null)
             PropertiesContext.getInstance().setProperty("bsresolution", System.getenv("BSRESOLUTION"));
         if (System.getenv("BSPROJECT") != null)
             PropertiesContext.getInstance().setProperty("bsproject", System.getenv("BSPROJECT"));

@@ -23,6 +23,7 @@ import java.util.Map;
 
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static org.nowhere_lights.testframework.drivers.WebDriverFactory.isBrowserStack;
 
 @Listeners({TestMethodListener.class, GlobalTextReport.class, TestListener.class})
 public class BaseTest extends Wrappers {
@@ -60,7 +61,7 @@ public class BaseTest extends Wrappers {
             for (ITestNGMethod method : context.getAllTestMethods())
                 method.setRetryAnalyzer(new RetryAnalyzer());
         suiteStart = System.currentTimeMillis();
-        if (System.getenv("BROWSERSTACK_USERNAME") == null && System.getenv("BROWSERSTACK_ACCESS_KEY") == null) {
+        if (isBrowserStack()) {
             _logger.info("<br>Setting browserstack driver: " + env.getValue());
         } else {
             _logger.info("<br>Setting server: " + env.getValue());
@@ -93,14 +94,13 @@ public class BaseTest extends Wrappers {
     public void beforeMethod(final ITestContext testContext, ITestResult testResult) throws Exception {
         _logger.info("<br>Starting test: " + testContext.getName());
         _logger.info("<br>****************************************************");
-        if (System.getenv("BROWSERSTACK_USERNAME") != null && System.getenv("BROWSERSTACK_ACCESS_KEY") != null) {
+        if (isBrowserStack()) {
             try {
                 propertiesContext.setProperty("bsname", testResult.getMethod().getDescription());
             } catch (NullPointerException ignored) {
                 propertiesContext.setProperty("bsname", testResult.getMethod().getMethodName());
             }
         }
-
         webDriverFactory.setWebDriver();
         open(PropertiesContext.getInstance().getProperty("urltest"));
         //pages initialize

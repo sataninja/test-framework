@@ -20,8 +20,12 @@ public class WebDriverFactory {
     private static Browser browser = Browser.toEnum(PropertiesContext.getInstance().getProperty("browser"));
     private BrowserstackDriver browserstackDriver = new BrowserstackDriver();
 
+    public static boolean isBrowserStack() {
+        return System.getenv("BROWSERSTACK_USERNAME") != null && System.getenv("BROWSERSTACK_ACCESS_KEY") != null;
+    }
+
     public void setWebDriver() throws Exception {
-        if (System.getenv("BROWSERSTACK_USERNAME") != null && System.getenv("BROWSERSTACK_ACCESS_KEY") != null) {
+        if (isBrowserStack()) {
             browserstackDriver.createBrowserStackDriver();
         } else {
             _logger.warn("Setting desktop driver");
