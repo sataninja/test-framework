@@ -79,6 +79,15 @@ public class PropertiesContext {
         if (System.getProperty("user.password.member") != null) {
             generalMap.setProperty("user.password.member", System.getProperty("user.password.member"));
         }
+
+        if (System.getenv("USER_EMAIL_ADMIN") != null)
+            generalMap.setProperty("user.email.admin", System.getenv("USER_EMAIL_ADMIN"));
+        if (System.getenv("USER_PASSWORD_ADMIN") != null)
+            generalMap.setProperty("user.password.admin", System.getenv("USER_PASSWORD_ADMIN"));
+        if (System.getenv("USER_EMAIL_MEMBER") != null)
+            generalMap.setProperty("user.email.member", System.getenv("USER_EMAIL_MEMBER"));
+        if (System.getenv("USER_PASSWORD_MEMBER") != null)
+            generalMap.setProperty("user.password.member", System.getenv("USER_PASSWORD_MEMBER"));
     }
 
     public String getProperty(String key) {
