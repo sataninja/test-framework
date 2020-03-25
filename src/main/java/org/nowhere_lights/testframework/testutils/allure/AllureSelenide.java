@@ -64,7 +64,7 @@ public class AllureSelenide implements LogEventListener {
             } else {
                 lifecycle.updateStep(stepResult -> stepResult
                         .setStatus(Status.BROKEN)
-                        .setStatusDetails(ResultsUtils.getStatusDetails(currentLog.getError()).orElse(null)));
+                        .setStatusDetails(ResultsUtils.getStatusDetails(currentLog.getError()).orElse(new StatusDetails())));
             }
             lifecycle.stopStep();
         });

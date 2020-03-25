@@ -43,7 +43,8 @@ public class WebDriverFactory {
                 WebDriverManager.chromedriver().setup();
                 Configuration.browser = ChromeDriverDesktop.class.getName();
             }
-            Configuration.startMaximized = false;
+//            Configuration.startMaximized = false;
+            Configuration.browserSize = "1600x1400";
             Configuration.timeout = 10000;
             String remote = System.getenv("BROWSER_URL");
             if (remote != null) {

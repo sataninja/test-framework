@@ -27,7 +27,7 @@ public class ChromeDriverDesktop implements WebDriverProvider {
         chromeOptions.addArguments("--disable-extensions");
         chromeOptions.addArguments("--disable-web-security");
 //        chromeOptions.addArguments("disable-native-notifications");
-//        chromeOptions.addArguments("--disable-infobars"); //does not works properly with chrome 65+, replaced with 'enable-automation' option below
+        chromeOptions.addArguments("--disable-infobars"); //does not works properly with chrome 65+, replaced with 'enable-automation' option below
 //        chromeOptions.addArguments("--start-fullscreen");
         chromeOptions.addArguments("--window-size=1920,1080");
         chromeOptions.addArguments("--disable-background-networking");
