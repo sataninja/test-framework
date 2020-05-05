@@ -35,7 +35,7 @@ public class ChromeDriverDesktop implements WebDriverProvider {
         chromeOptions.addArguments("--enable-push-api-background-mode");
         chromeOptions.addArguments("--enable-site-settings");
         chromeOptions.addArguments("--proxy-server=" + ProxyProvider.getSeleniumProxy().getHttpProxy());
-//        chromeOptions.addArguments("--ignore-certificate-errors", "--user-data-dir=build/proxy-cache");
+        chromeOptions.addArguments("--ignore-certificate-errors", "--user-data-dir=build/proxy-cache");
 
         Map<String, Object> chromePrefs = new HashMap<>();
         chromePrefs.put("profile.default_content_setting_values.geolocation", 2);
