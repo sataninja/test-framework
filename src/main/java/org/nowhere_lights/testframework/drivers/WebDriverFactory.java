@@ -10,8 +10,6 @@ import org.nowhere_lights.testframework.drivers.vars.Browser;
 import org.nowhere_lights.testframework.testutils.allure.AllureSelenide;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import static com.codeborne.selenide.Selenide.open;
-
 
 public class WebDriverFactory {
 
@@ -25,6 +23,7 @@ public class WebDriverFactory {
     }
 
     public void setWebDriver() throws Exception {
+//        open(PropertiesContext.getInstance().getProperty("urltest"));
         if (isBrowserStack()) {
             browserstackDriver.createBrowserStackDriver();
         } else {
@@ -35,15 +34,20 @@ public class WebDriverFactory {
             } else if (browser == Browser.FIREFOX) {
                 WebDriverManager.firefoxdriver().setup();
                 Configuration.browser = "firefox";
+//                FirefoxOptions ffoptions = new FirefoxOptions();
                 System.setProperty("firefoxprofile.dom.webnotifications.serviceworker.enabled", "false");
                 System.setProperty("firefoxprofile.dom.webnotifications.enabled", "false");
                 System.setProperty("firefoxprofile.geo.enabled", "false");
+                //set proxy here
+//                ffoptions.setProxy(ClientUtil.createSeleniumProxy(proxy));
             } else {
                 _logger.warn("No driver property found, using default browser (chrome)");
                 WebDriverManager.chromedriver().setup();
                 Configuration.browser = ChromeDriverDesktop.class.getName();
             }
 //            Configuration.startMaximized = false;
+//            Configuration.proxyEnabled = true;
+//            Configuration.fileDownload = FileDownloadMode.PROXY;
             Configuration.browserSize = "1600x1400";
             Configuration.timeout = 10000;
             String remote = System.getenv("BROWSER_URL");
@@ -62,7 +66,7 @@ public class WebDriverFactory {
             }
         }
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
-        open(PropertiesContext.getInstance().getProperty("urltest"));
+//        open(PropertiesContext.getInstance().getProperty("urltest"));
     }
 
     public void closeBrowserstack() throws Exception {

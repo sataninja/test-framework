@@ -3,6 +3,7 @@ package org.nowhere_lights.testframework.testutils;
 import com.codeborne.selenide.testng.GlobalTextReport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.nowhere_lights.testframework.drivers.ProxyProvider;
 import org.nowhere_lights.testframework.drivers.WaitDriver;
 import org.nowhere_lights.testframework.drivers.WebDriverFactory;
 import org.nowhere_lights.testframework.drivers.utils.EmailUtils;
@@ -44,6 +45,7 @@ public class BaseTest extends Wrappers {
     protected static final Boolean RETRY_ON = Boolean.valueOf(propertiesContext.getProperty("retry"));
     protected static EmailUtils emailUtils;
     protected WebDriverFactory webDriverFactory = new WebDriverFactory();
+    protected ProxyProvider proxyProvider = new ProxyProvider();
     protected SoftAssert softAssert;
     public Long suiteStart, suiteStop = 0L, elapsedTime;
 
@@ -101,6 +103,9 @@ public class BaseTest extends Wrappers {
                 propertiesContext.setProperty("bsname", testResult.getMethod().getMethodName());
             }
         }
+        proxyProvider.setProxy();
+//        proxyProvider.getRequestHeaders();
+//        proxyProvider.getResponseHeader();
         webDriverFactory.setWebDriver();
         open(PropertiesContext.getInstance().getProperty("urltest"));
         //pages initialize
@@ -130,6 +135,7 @@ public class BaseTest extends Wrappers {
         _logger.info("<br>Time taken by method " + iTestResult.getName() + ": " + (iTestResult.getEndMillis() - iTestResult.getStartMillis()) / 1000 + "sec");
         _logger.info("<br>****************************************************");
         webDriverFactory.closeBrowserstack();
+        ProxyProvider.getProxy().stop();
     }
 
     @AfterSuite

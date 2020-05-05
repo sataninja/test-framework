@@ -17,6 +17,7 @@ public class ChromeDriverDesktop implements WebDriverProvider {
     public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
         desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, getChromeOptions());
         desiredCapabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+        desiredCapabilities.setCapability(CapabilityType.PROXY, ProxyProvider.getSeleniumProxy());
         return new ChromeDriver(desiredCapabilities);
     }
 
@@ -29,10 +30,12 @@ public class ChromeDriverDesktop implements WebDriverProvider {
 //        chromeOptions.addArguments("disable-native-notifications");
         chromeOptions.addArguments("--disable-infobars"); //does not works properly with chrome 65+, replaced with 'enable-automation' option below
 //        chromeOptions.addArguments("--start-fullscreen");
-        chromeOptions.addArguments("--window-size=1920,1080");
+//        chromeOptions.addArguments("--window-size=1920,1080");
         chromeOptions.addArguments("--disable-background-networking");
         chromeOptions.addArguments("--enable-push-api-background-mode");
         chromeOptions.addArguments("--enable-site-settings");
+        chromeOptions.addArguments("--proxy-server=" + ProxyProvider.getSeleniumProxy().getHttpProxy());
+//        chromeOptions.addArguments("--ignore-certificate-errors", "--user-data-dir=build/proxy-cache");
 
         Map<String, Object> chromePrefs = new HashMap<>();
         chromePrefs.put("profile.default_content_setting_values.geolocation", 2);

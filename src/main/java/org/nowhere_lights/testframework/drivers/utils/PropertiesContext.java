@@ -59,6 +59,9 @@ public class PropertiesContext {
         if (System.getProperty("urlstg") != null) {
             generalMap.setProperty("urlstg", System.getProperty("urlstg"));
         }
+        if (System.getProperty("retry") != null) {
+            generalMap.setProperty("retry", System.getProperty("retry"));
+        }
         //email props
         if (System.getProperty("email.address") != null) {
             generalMap.setProperty("email.address", System.getProperty("email.address"));
