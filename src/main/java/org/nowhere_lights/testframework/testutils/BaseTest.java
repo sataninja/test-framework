@@ -69,6 +69,9 @@ public class BaseTest extends Wrappers {
             _logger.info("<br>Setting server: " + env.getValue());
             _logger.info("<br>Setting browser: " + PropertiesContext.getInstance().getProperty("browser"));
         }
+        proxyProvider.setProxy();
+//        proxyProvider.getRequestHeaders();
+//        proxyProvider.getResponseHeader();
     }
 
     @BeforeClass
@@ -103,9 +106,6 @@ public class BaseTest extends Wrappers {
                 propertiesContext.setProperty("bsname", testResult.getMethod().getMethodName());
             }
         }
-        proxyProvider.setProxy();
-//        proxyProvider.getRequestHeaders();
-//        proxyProvider.getResponseHeader();
         webDriverFactory.setWebDriver();
         open(PropertiesContext.getInstance().getProperty("urltest"));
         //pages initialize
@@ -135,7 +135,6 @@ public class BaseTest extends Wrappers {
         _logger.info("<br>Time taken by method " + iTestResult.getName() + ": " + (iTestResult.getEndMillis() - iTestResult.getStartMillis()) / 1000 + "sec");
         _logger.info("<br>****************************************************");
         webDriverFactory.closeBrowserstack();
-        ProxyProvider.getProxy().stop();
     }
 
     @AfterSuite
@@ -144,6 +143,7 @@ public class BaseTest extends Wrappers {
         suiteStop = System.currentTimeMillis();
         elapsedTime = (suiteStop - suiteStart) / 1000;
         _logger.info("<br>Suite  " + suiteName + " took " + elapsedTime + " seconds");
+        ProxyProvider.getProxy().stop();
     }
 
     public SoftAssert getSoftAssert() {
