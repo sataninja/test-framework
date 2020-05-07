@@ -32,6 +32,7 @@ public class ChromeDriverDesktop implements WebDriverProvider {
 //        chromeOptions.addArguments("--start-fullscreen");
 //        chromeOptions.addArguments("--window-size=1920,1080");
         chromeOptions.addArguments("--disable-background-networking");
+        chromeOptions.addArguments("--disable-popup-blocking");
         chromeOptions.addArguments("--enable-push-api-background-mode");
         chromeOptions.addArguments("--enable-site-settings");
         chromeOptions.addArguments("--proxy-server=" + ProxyProvider.getSeleniumProxy().getHttpProxy());
