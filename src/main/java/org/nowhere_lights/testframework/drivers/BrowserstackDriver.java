@@ -1,10 +1,10 @@
 package org.nowhere_lights.testframework.drivers;
 
 import com.browserstack.local.Local;
-import com.codeborne.selenide.WebDriverRunner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.nowhere_lights.testframework.drivers.utils.PropertiesContext;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -17,11 +17,11 @@ import java.util.concurrent.TimeUnit;
 public class BrowserstackDriver {
 
     private static final Logger _logger = LogManager.getLogger(BrowserstackDriver.class.getSimpleName());
-    private RemoteWebDriver remoteWebDriver;
-    private Local local;
-    private String sessionId;
+    private static RemoteWebDriver remoteWebDriver;
+    private static Local local;
+    private static String sessionId;
 
-    public void createBrowserStackDriver() throws Exception {
+    public static WebDriver createBrowserStackDriver() throws Exception {
         String username = System.getenv("BROWSERSTACK_USERNAME");
         String accessKey = System.getenv("BROWSERSTACK_ACCESS_KEY");
         String os = PropertiesContext.getInstance().getProperty("bsos");
@@ -79,22 +79,28 @@ public class BrowserstackDriver {
                     new URL("http://" + username + ":" + accessKey + "@hub-cloud.browserstack.com/wd/hub"), capabilities);
             remoteWebDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
             sessionId = remoteWebDriver.getSessionId().toString();
-            WebDriverRunner.setWebDriver(remoteWebDriver);
+
+            _logger.info("Starting BrowserStack session!");
+            _logger.info("Using " + os + " environment");
+            _logger.info("Using " + osVersion + " OS version");
+            _logger.info("Using " + browser + " browser");
+            _logger.info("Using " + browserVersion + " browser version");
+            _logger.info("Session (id): " + sessionId);
+
+            return remoteWebDriver;
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        _logger.info("Starting BrowserStack session!");
-        _logger.info("Using " + os + " environment");
-        _logger.info("Using " + osVersion + " OS version");
-        _logger.info("Using " + browser + " browser");
-        _logger.info("Using " + browserVersion + " browser version");
-        _logger.info("Session (id): " + sessionId);
+        return null;
     }
 
-    public void close() throws Exception {
-        if (remoteWebDriver != null)
-            remoteWebDriver.quit();
-        if (local != null)
-            local.stop();
+    public static void closeBrowserstack() throws Exception {
+        if (remoteWebDriver != null) remoteWebDriver.quit();
+        if (local != null) local.stop();
     }
+
+    public static boolean isBrowserStack() {
+        return System.getenv("BROWSERSTACK_USERNAME") != null && System.getenv("BROWSERSTACK_ACCESS_KEY") != null;
+    }
+
 }

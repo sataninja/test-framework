@@ -3,6 +3,7 @@ package org.nowhere_lights.testframework.testutils;
 import com.codeborne.selenide.testng.GlobalTextReport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.nowhere_lights.testframework.drivers.BrowserstackDriver;
 import org.nowhere_lights.testframework.drivers.ProxyProvider;
 import org.nowhere_lights.testframework.drivers.WaitDriver;
 import org.nowhere_lights.testframework.drivers.WebDriverFactory;
@@ -22,9 +23,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static org.nowhere_lights.testframework.drivers.WebDriverFactory.isBrowserStack;
+import static org.nowhere_lights.testframework.drivers.BrowserstackDriver.isBrowserStack;
 
 @Listeners({TestMethodListener.class, GlobalTextReport.class, TestListener.class})
 public class BaseTest extends Wrappers {
@@ -58,7 +58,7 @@ public class BaseTest extends Wrappers {
     }
 
     @BeforeSuite
-    public void beforeSuite(final ITestContext context) {
+    public synchronized void beforeSuite(final ITestContext context) {
         if (RETRY_ON)
             for (ITestNGMethod method : context.getAllTestMethods())
                 method.setRetryAnalyzer(new RetryAnalyzer());
@@ -69,13 +69,13 @@ public class BaseTest extends Wrappers {
             _logger.info("<br>Setting server: " + env.getValue());
             _logger.info("<br>Setting browser: " + PropertiesContext.getInstance().getProperty("browser"));
         }
-        proxyProvider.setProxy();
+//        proxyProvider.setProxy();
 //        proxyProvider.getRequestHeaders();
 //        proxyProvider.getResponseHeader();
     }
 
     @BeforeClass
-    public static void connectToEmail() {
+    public synchronized static void connectToEmail() {
         try {
             if (EMAIL_USERNAME != null && EMAIL_PASSWORD != null && EMAIL_SMTP_HOST != null)
                 emailUtils = new EmailUtils(EMAIL_USERNAME, EMAIL_PASSWORD, EMAIL_SMTP_HOST, EmailUtils.EmailFolder.INBOX);
@@ -96,7 +96,7 @@ public class BaseTest extends Wrappers {
      * </p>
      */
     @BeforeMethod(alwaysRun = true)
-    public void beforeMethod(final ITestContext testContext, ITestResult testResult) throws Exception {
+    public synchronized void beforeMethod(final ITestContext testContext, ITestResult testResult) throws Exception {
         _logger.info("<br>Starting test: " + testContext.getName());
         _logger.info("<br>****************************************************");
         if (isBrowserStack()) {
@@ -107,7 +107,6 @@ public class BaseTest extends Wrappers {
             }
         }
         webDriverFactory.setWebDriver();
-        open(PropertiesContext.getInstance().getProperty("urltest"));
         //pages initialize
         for (Map.Entry<String, String> pageEntry : pageNames.entrySet()) {
             try {
@@ -129,21 +128,22 @@ public class BaseTest extends Wrappers {
     }
 
     @AfterMethod(alwaysRun = true)
-    public void afterMethod(final ITestContext testContext, ITestResult iTestResult) throws Exception {
+    public synchronized void afterMethod(final ITestContext testContext, ITestResult iTestResult) throws Exception {
         _logger.info("<br>Completed test method " + iTestResult.getName());
         _logger.info("<br>****************************************************");
         _logger.info("<br>Time taken by method " + iTestResult.getName() + ": " + (iTestResult.getEndMillis() - iTestResult.getStartMillis()) / 1000 + "sec");
         _logger.info("<br>****************************************************");
-        webDriverFactory.closeBrowserstack();
+        webDriverFactory.closeWebDriver();
+        BrowserstackDriver.closeBrowserstack();
     }
 
     @AfterSuite
-    public void afterSuite(final ITestContext iTestContext) {
+    public synchronized void afterSuite(final ITestContext iTestContext) {
         String suiteName = iTestContext.getSuite().getName();
         suiteStop = System.currentTimeMillis();
         elapsedTime = (suiteStop - suiteStart) / 1000;
         _logger.info("<br>Suite  " + suiteName + " took " + elapsedTime + " seconds");
-        ProxyProvider.getProxy().stop();
+//        ProxyProvider.getProxy().stop();
     }
 
     public SoftAssert getSoftAssert() {
@@ -151,7 +151,7 @@ public class BaseTest extends Wrappers {
     }
 
     @Override
-    public WebDriver getDriver() {
+    public synchronized WebDriver getDriver() {
         return getWebDriver();
     }
 

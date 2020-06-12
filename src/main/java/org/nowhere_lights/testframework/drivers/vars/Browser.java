@@ -2,8 +2,10 @@ package org.nowhere_lights.testframework.drivers.vars;
 
 public enum Browser {
     FIREFOX("firefox"),
+    CHROME("chrome"),
     IE("ie"),
-    CHROME("chrome");
+    EDGE("edge"),
+    SAFARI("safari");
 
     private final String browser;
 

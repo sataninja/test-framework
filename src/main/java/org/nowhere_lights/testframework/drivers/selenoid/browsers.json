@@ -1,0 +1,37 @@
+{
+    "chrome": {
+        "default": "76.0",
+        "versions": {
+            "75.0": {
+                "image": "selenoid/vnc:chrome_75.0",
+                "port": "4444",
+                "path": "/wd/hub"
+            },
+            "76.0": {
+                "image": "selenoid/vnc:chrome_76.0",
+                "port": "4444",
+                "path": "/wd/hub"
+            }
+        }
+    },
+    "firefox": {
+        "default": "68.0",
+        "versions": {
+            "68.0": {
+                "image": "selenoid/vnc:firefox_68.0",
+                "port": "4444",
+                "tmpfs": {"/tmp": "size=512m"},
+                "shmSize": 1073741824
+            }
+        }
+    },
+    "edge": {
+        "deafult": "18",
+        "versions": {
+            "18": {
+                "image": "windows:edge:83.0",
+                "port": "4444"
+            }
+        }
+    }
+}

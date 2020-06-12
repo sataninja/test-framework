@@ -10,18 +10,18 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChromeDriverDesktop implements WebDriverProvider {
+public class ChromeDriverDesktop {
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
-        desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, getChromeOptions());
-        desiredCapabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-        desiredCapabilities.setCapability(CapabilityType.PROXY, ProxyProvider.getSeleniumProxy());
-        return new ChromeDriver(desiredCapabilities);
-    }
+//    @SuppressWarnings("deprecation")
+//    @Override
+//    public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
+//        desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, getChromeOptions());
+//        desiredCapabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+//        desiredCapabilities.setCapability(CapabilityType.PROXY, ProxyProvider.getSeleniumProxy());
+//        return new ChromeDriver(desiredCapabilities);
+//    }
 
-    private static ChromeOptions getChromeOptions() {
+    public synchronized static ChromeOptions getChromeOptions() {
         String downloadFilepath = System.getProperty("user.dir") + "/downloadedFiles";
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--disable-notifications");
@@ -35,8 +35,8 @@ public class ChromeDriverDesktop implements WebDriverProvider {
         chromeOptions.addArguments("--disable-popup-blocking");
         chromeOptions.addArguments("--enable-push-api-background-mode");
         chromeOptions.addArguments("--enable-site-settings");
-        chromeOptions.addArguments("--proxy-server=" + ProxyProvider.getSeleniumProxy().getHttpProxy());
-        chromeOptions.addArguments("--ignore-certificate-errors", "--user-data-dir=build/proxy-cache");
+//        chromeOptions.addArguments("--proxy-server=" + ProxyProvider.getSeleniumProxy().getHttpProxy());
+//        chromeOptions.addArguments("--ignore-certificate-errors", "--user-data-dir=build/proxy-cache");
 
         Map<String, Object> chromePrefs = new HashMap<>();
         chromePrefs.put("profile.default_content_setting_values.geolocation", 2);
@@ -50,6 +50,14 @@ public class ChromeDriverDesktop implements WebDriverProvider {
         chromeOptions.setExperimentalOption("prefs", chromePrefs);
         chromeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
         return chromeOptions;
+    }
+
+    public static DesiredCapabilities getChromeDesiredCapabilities() {
+        DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+        desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, getChromeOptions());
+        desiredCapabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+        desiredCapabilities.setCapability(CapabilityType.PROXY, ProxyProvider.getSeleniumProxy());
+        return desiredCapabilities;
     }
 
 }

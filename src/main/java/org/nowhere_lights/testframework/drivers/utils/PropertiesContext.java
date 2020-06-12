@@ -47,6 +47,7 @@ public class PropertiesContext {
 
         generalMap.putAll(configMap);
         generalMap.putAll(pagesMap);
+
         if (System.getProperty("browser") != null) {
             generalMap.setProperty("browser", System.getProperty("browser"));
         }
@@ -61,6 +62,13 @@ public class PropertiesContext {
         }
         if (System.getProperty("retry") != null) {
             generalMap.setProperty("retry", System.getProperty("retry"));
+        }
+        //selenoid
+        if (System.getenv("selenoid.run") != null) {
+            generalMap.setProperty("selenoid.run", System.getProperty("selenoid.run"));
+        }
+        if (System.getenv("selenoid.url") != null) {
+            generalMap.setProperty("selenoid.url", System.getenv("selenoid.url"));
         }
         //email props
         if (System.getProperty("email.address") != null) {
@@ -104,10 +112,8 @@ public class PropertiesContext {
     }
 
     public void setProperty(String key, String value) {
-        if (value == null)
-            Reporter.log("Value is null");
-        if (key != null)
-            generalMap.setProperty(key, value);
+        if (value == null) Reporter.log("Value is null");
+        if (key != null) generalMap.setProperty(key, value);
         else Reporter.log("Key is null");
     }
 

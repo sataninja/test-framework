@@ -51,12 +51,11 @@ public class WaitDriver extends WebDriverWait {
     /**
      * Click using js script, waiting for element to display
      *
-     * @param by will be converted to WebElement
+     * @param element to interact
      */
-    public void clickJS(By by) {
+    public void clickJS(WebElement element) {
         try {
-            waitUntilElementLocated(by);
-            WebElement element = driver.findElement(by);
+            waitUntilElementLocated(element);
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
         } catch (TimeoutException timeOut) {
             Reporter.log("Can't find an element. Check your selector");
@@ -94,8 +93,8 @@ public class WaitDriver extends WebDriverWait {
         return this.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
     }
 
-    public WebElement waitUntilElementLocated(By locator) {
-        return this.ignoring(StaleElementReferenceException.class).until(ExpectedConditions.visibilityOfElementLocated(locator));
+    public WebElement waitUntilElementLocated(WebElement element) {
+        return this.ignoring(StaleElementReferenceException.class).until(ExpectedConditions.visibilityOf(element));
     }
 
     public WebElement waitUntilElementClickable(By locator) {
@@ -130,10 +129,6 @@ public class WaitDriver extends WebDriverWait {
         action.moveToElement(element).build().perform();
     }
 
-    public void hover(By by) {
-        hover(waitUntilElementLocated(by));
-    }
-
     public List<WebElement> getAllVisibleElements(By by) {
         return until(ExpectedConditions.visibilityOfAllElementsLocatedBy(by));
     }
@@ -150,14 +145,14 @@ public class WaitDriver extends WebDriverWait {
         }
     }
 
-    public boolean checkIfElementExists(By by) {
+    public boolean checkIfElementExists(WebElement element) {
         try {
             driver.manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
-            long t = (long) 1;
-            new WebDriverWait(driver, t).until(ExpectedConditions.visibilityOfElementLocated(by));
+            long t = 1;
+            new WebDriverWait(driver, t).until(ExpectedConditions.visibilityOf(element));
             return true;
         } catch (WebDriverException e) {
-            Reporter.log("Element is not exists: " + by.toString(), 5);
+            Reporter.log("Element is not exists: " + element, 5);
             return false;
         } finally {
             driver.manage().timeouts().implicitlyWait(WebDriverFactory.DEFAULT_TIMEOUT, TimeUnit.SECONDS);
@@ -167,13 +162,13 @@ public class WaitDriver extends WebDriverWait {
     /**
      * Returns text of element or null if there are no such element
      *
-     * @param by Text to extract
+     * @param element to interact
      * @return text
      */
-    public String getTextSafely(By by) {
+    public String getTextSafely(WebElement element) {
         try {
-            if (this.checkIfElementExists(by)) {
-                return waitUntilElementLocated(by).getText();
+            if (this.checkIfElementExists(element)) {
+                return waitUntilElementLocated(element).getText();
             }
             return null;
         } catch (Exception e) {
@@ -184,24 +179,24 @@ public class WaitDriver extends WebDriverWait {
     /**
      * Method for fields with per simbol validation (date input)
      *
-     * @param by
+     * @param element
      * @param keys
      */
-    public void sendKeysOneByOne(By by, String keys) {
+    public void sendKeysOneByOne(WebElement element, String keys) {
         for (char key : keys.toCharArray()) {
-            waitUntilElementLocated(by).sendKeys(String.valueOf(key));
+            waitUntilElementLocated(element).sendKeys(String.valueOf(key));
         }
 
     }
 
     /**
-     * @param by   input selector
-     * @param text text to set
+     * @param element input selector
+     * @param text    text to set
      */
-    public void clearAndType(By by, String text) {
-        waitUntilElementLocated(by).clear();
+    public void clearAndType(WebElement element, String text) {
+        waitUntilElementLocated(element).clear();
         if (text != null) {
-            waitUntilElementLocated(by).sendKeys(text);
+            waitUntilElementLocated(element).sendKeys(text);
         }
     }
 

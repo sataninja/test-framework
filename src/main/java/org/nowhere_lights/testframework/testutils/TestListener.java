@@ -8,10 +8,11 @@ import org.openqa.selenium.logging.LogType;
 import org.testng.*;
 import org.testng.annotations.Listeners;
 
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 @Listeners({ScreenShooter.class})
@@ -31,10 +32,10 @@ public class TestListener extends TestListenerAdapter {
 
     @Override
     public void onTestFailure(ITestResult result) {
-        for (LogEntry entry : getWebDriver().manage().logs().get(LogType.BROWSER).filter(Level.SEVERE)) {
+        for (LogEntry entry : getLogEntries(Level.SEVERE)) {
             Reporter.log("<br>***** Severe JS error " + entry.getMessage() + " *****", true);
         }
-        for (LogEntry entry : getWebDriver().manage().logs().get(LogType.BROWSER).filter(Level.WARNING)) {
+        for (LogEntry entry : getLogEntries(Level.WARNING)) {
             Reporter.log("<br>***** Warning JS error " + entry.getMessage() + " *****", true);
         }
         Reporter.log("<br>***** Error " + result.getName() + " test has failed *****", true);
@@ -48,7 +49,6 @@ public class TestListener extends TestListenerAdapter {
                 + "\" height=\"" + SNAPSHOT_HEIGHT
                 + "\" width=\"" + SNAPSHOT_WIDTH + "\">", 1, true);
         Reporter.setCurrentTestResult(null);
-        closeWebDriver();
     }
 
     @Override
@@ -85,6 +85,12 @@ public class TestListener extends TestListenerAdapter {
                 }
             }
         }
-        closeWebDriver();
+    }
+
+    private List<LogEntry> getLogEntries(Level level) {
+        return getWebDriver().manage().logs().get(LogType.BROWSER).getAll().stream()
+                .filter(logEntry -> logEntry.getLevel().intValue() >= level.intValue())
+                .filter(logEntry -> !logEntry.getMessage().contains("favicon.ico"))
+                .collect(Collectors.toList());
     }
 }
