@@ -42,8 +42,8 @@ dependencies {
     compile group: 'com.sun.mail', name: 'javax.mail', version: '1.6.0'
     compile group: 'org.apache.poi', name: 'poi', version: '4.0.0'
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.0'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.1'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.2'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.2'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     compile(group: 'com.shekhargulati.urlcleaner', name: 'urlcleaner', version: '0.4.0', ext: 'jar')
     compile group: 'org.assertj', name: 'assertj-core', version: '3.12.2'
