@@ -15,7 +15,7 @@ public class SelenoidRemoteDriverDesktop {
     public static synchronized WebDriver createRemoteWebDriver() {
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         desiredCapabilities.setBrowserName(PropertiesContext.getInstance().getProperty("browser"));
-//        desiredCapabilities.setVersion("76.0");
+//        desiredCapabilities.setVersion("83.0");
         desiredCapabilities.setCapability("enableVNC", true);
         desiredCapabilities.setCapability("enableVideo", false);
 //        desiredCapabilities.setCapability(CapabilityType.PROXY, ProxyProvider.getSeleniumProxy());

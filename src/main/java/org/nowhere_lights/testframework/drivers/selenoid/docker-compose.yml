@@ -24,7 +24,7 @@ services:
     command: ["--selenoid-uri", "http://selenoid:4444"]
 
   chrome:
-    image: "selenoid/vnc:chrome:76.0"
+    image: "selenoid/vnc:chrome:83.0"
     network_mode: bridge
     links:
       - selenoid      
