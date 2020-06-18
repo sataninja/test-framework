@@ -51,6 +51,9 @@ public class PropertiesContext {
         if (System.getProperty("browser") != null) {
             generalMap.setProperty("browser", System.getProperty("browser"));
         }
+        if (System.getProperty("browser.version") != null) {
+            generalMap.setProperty("browser.version", System.getProperty("browser.version"));
+        }
         if (System.getProperty("env") != null) {
             generalMap.setProperty("env", System.getProperty("env"));
         }
@@ -64,8 +67,11 @@ public class PropertiesContext {
             generalMap.setProperty("retry", System.getProperty("retry"));
         }
         //selenoid
-        if (System.getenv("selenoid.run") != null) {
+        if (System.getProperty("selenoid.run") != null) {
             generalMap.setProperty("selenoid.run", System.getProperty("selenoid.run"));
+        }
+        if (System.getenv("selenoid.run") != null) {
+            generalMap.setProperty("selenoid.run", System.getenv("selenoid.run"));
         }
         if (System.getenv("selenoid.url") != null) {
             generalMap.setProperty("selenoid.url", System.getenv("selenoid.url"));
