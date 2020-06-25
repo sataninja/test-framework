@@ -73,6 +73,9 @@ public class PropertiesContext {
         if (System.getenv("selenoid.run") != null) {
             generalMap.setProperty("selenoid.run", System.getenv("selenoid.run"));
         }
+        if (System.getProperty("selenoid.url") != null) {
+            generalMap.setProperty("selenoid.url", System.getProperty("selenoid.url"));
+        }
         if (System.getenv("selenoid.url") != null) {
             generalMap.setProperty("selenoid.url", System.getenv("selenoid.url"));
         }
