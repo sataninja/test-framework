@@ -13,6 +13,13 @@ import java.net.URI;
 public class SelenoidRemoteDriverDesktop {
 
     public static synchronized WebDriver createRemoteWebDriver() {
+        String url;
+        if (System.getProperty("selenoid.url") != null || System.getenv("selenoid.url") != null)
+            url = "http://" + PropertiesContext.getInstance().getProperty("selenoid.url") + ":4444";
+        else if (PropertiesContext.getInstance().getProperty("selenoid.url").equals("localhost"))
+            url = "http://" + PropertiesContext.getInstance().getProperty("selenoid.url") + ":4444/wd/hub";
+        else throw new NullPointerException("selenoid.url is NULL!");
+
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         if (PropertiesContext.getInstance().getProperty("browser") != null)
             desiredCapabilities.setBrowserName(PropertiesContext.getInstance().getProperty("browser"));
@@ -25,7 +32,7 @@ public class SelenoidRemoteDriverDesktop {
 
         try {
             RemoteWebDriver remoteDriver = new RemoteWebDriver(
-                    URI.create("http://" + PropertiesContext.getInstance().getProperty("selenoid.url") + ":4444/wd/hub").toURL(),
+                    URI.create(url).toURL(),
                     desiredCapabilities
             );
             remoteDriver.manage().window().setSize(new Dimension(1920, 1080));
