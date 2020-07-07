@@ -4,6 +4,9 @@ import io.netty.handler.codec.http.HttpHeaders;
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
+import net.lightbody.bmp.filters.RequestFilter;
+import net.lightbody.bmp.filters.ResponseFilter;
+import net.lightbody.bmp.filters.ResponseFilterAdapter;
 import net.lightbody.bmp.proxy.CaptureType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +15,7 @@ import org.openqa.selenium.Proxy;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -27,6 +31,7 @@ public class ProxyProvider {
 
     private static Set<String> requests = new HashSet<>();
     private static Set<String> responses = new HashSet<>();
+    private static Map<String, String> responseMap = new HashMap<>();
 
     public void setProxy() {
         try {
@@ -86,16 +91,23 @@ public class ProxyProvider {
         }));
     }
 
-    public void getResponseHeader() {
-        proxy.addResponseFilter(((response, contents, messageInfo) -> {
+    public void getResponseHeader(String apiSign) {
+        ResponseFilter filter = (((response, contents, messageInfo) -> {
             HttpHeaders respHeaders = response.headers();
             String url = messageInfo.getUrl();
+            _logger.warn("filter url " + messageInfo.getOriginalUrl());
+            _logger.warn("filter url " + messageInfo.getOriginalUrl().contains(apiSign));
             for (Map.Entry<String, String> entry : respHeaders) {
                 _logger.warn("header response: " + entry.getKey());
                 _logger.warn("value response: " + entry.getKey());
             }
+            if (messageInfo.getOriginalUrl().contains(apiSign)) {
+                _logger.warn("reg catcher: " + contents.getTextContents());
+                responseMap.put(apiSign, contents.getTextContents());
+            }
             responses.add(url + "\n\n" + contents.getTextContents());
         }));
+        proxy.addFirstHttpFilterFactory(new ResponseFilterAdapter.FilterSource(filter, 16777216));
     }
 
 }

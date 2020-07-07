@@ -68,7 +68,7 @@ allure {
     autoconfigure = true
     aspectjweaver = true
     allureJavaVersion = '2.0-BETA10'
-    downloadLinkFormat = 'https://dl.bintray.com/qameta/maven/io/qameta/allure/allure-commandline/%s/allure-commandline-%<s.zip'
+    downloadLinkFormat = 'https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/%s/allure-commandline-%<s.zip'
 }
 
 def example = project.hasProperty("example")
@@ -80,6 +80,7 @@ test {
     }
     systemProperty "browser", System.getProperty("browser")
     systemProperty "browser_version", System.getProperty("browser_version")
+    systemProperty "selenoid.url", System.getProperty("selenoid.url")
     systemProperty "env", System.getProperty("env")
     systemProperty "retry", System.getProperty("retry")
     systemProperty "urltest", System.getProperty("urltest")
