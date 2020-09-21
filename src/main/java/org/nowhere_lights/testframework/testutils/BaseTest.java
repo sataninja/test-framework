@@ -9,7 +9,6 @@ import org.nowhere_lights.testframework.drivers.WaitDriver;
 import org.nowhere_lights.testframework.drivers.WebDriverFactory;
 import org.nowhere_lights.testframework.drivers.utils.EmailUtils;
 import org.nowhere_lights.testframework.drivers.utils.PropertiesContext;
-import org.nowhere_lights.testframework.drivers.utils.Wrappers;
 import org.nowhere_lights.testframework.drivers.vars.Environment;
 import org.nowhere_lights.testframework.pages.BasePage;
 import org.openqa.selenium.WebDriver;
@@ -18,8 +17,6 @@ import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +24,7 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.nowhere_lights.testframework.drivers.BrowserstackDriver.isBrowserStack;
 
 @Listeners({TestMethodListener.class, GlobalTextReport.class, TestListener.class})
-public class BaseTest extends Wrappers {
+public abstract class BaseTest {
 
     private static PropertiesContext propertiesContext = PropertiesContext.getInstance();
     private static Environment env = Environment.toEnum(propertiesContext.getProperty("env"));
@@ -150,7 +147,6 @@ public class BaseTest extends Wrappers {
         return softAssert;
     }
 
-    @Override
     public synchronized WebDriver getDriver() {
         return getWebDriver();
     }
