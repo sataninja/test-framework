@@ -1,27 +1,31 @@
 version: '3'
 services:
   selenoid:
-    network_mode: bridge
-    image: "aerokube/selenoid:latest-release"
+    container_name: selenoid
+    image: "aerokube/selenoid"
+    networks:
+      - development
     volumes:
-      - "$PWD:/etc/selenoid"
+      - "$PWD/ui-tests/selenoid_conf:/etc/selenoid"
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "$PWD:/opt/selenoid/video"
-      - "$PWD:/opt/selenoid/logs"
+      - "$PWD/ui-tests/build/selenoid_conf/video:/opt/selenoid/video"
+      - "$PWD/ui-tests/build/selenoid_conf/logs:/opt/selenoid/logs"
     environment:
-      - OVERRIDE_VIDEO_OUTPUT_DIR=$PWD
-    command: ["-conf", "-vnc", "/etc/selenoid/browsers.json", "-video-output-dir", "/opt/selenoid/video", "-log-output-dir", "/opt/selenoid/logs"]
+      - OVERRIDE_VIDEO_OUTPUT_DIR=$PWD/ui-tests/selenoid_conf/video
+    command: ["-conf", "/etc/selenoid/browsers.json", "-video-output-dir", "/opt/selenoid/video", "-log-output-dir", "/opt/selenoid/logs", "-limit", "10", "-service-startup-timeout", "1m"]
     ports:
       - "4444:4444"
 
-  selenoid-ui:
-    image: "aerokube/selenoid-ui:latest-release"
-    network_mode: bridge
-    links:
-      - selenoid
-    ports:
-      - "8080:8080"
-    command: ["--selenoid-uri", "http://selenoid:4444"]
+    selenoid-ui:
+      container_name: selenoid-ui
+      image: "aerokube/selenoid-ui"
+      networks:
+        - development
+      links:
+        - selenoid
+      ports:
+        - "9988:8080"
+      command: ["--selenoid-uri", "http://selenoid:4444"]
 
   chrome:
     image: "selenoid/vnc:chrome:83.0"
@@ -34,3 +38,7 @@ services:
     network_mode: bridge
     links:
       - selenoid
+
+
+
+#  "-container-network" option should be added to selenoid command in order to run it from custom network
