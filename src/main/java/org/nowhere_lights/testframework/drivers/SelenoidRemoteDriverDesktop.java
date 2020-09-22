@@ -9,6 +9,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 
 public class SelenoidRemoteDriverDesktop {
 
@@ -24,7 +25,8 @@ public class SelenoidRemoteDriverDesktop {
 //        desiredCapabilities.setCapability(CapabilityType.PROXY, ProxyProvider.getSeleniumProxy());
 
         RemoteWebDriver remoteDriver = new RemoteWebDriver(
-                URI.create("http://" + PropertiesContext.getInstance().getProperty("selenoid.url") + ":4444/wd/hub").toURL(),
+//                URI.create("http://" + PropertiesContext.getInstance().getProperty("selenoid.url") + ":4444/wd/hub").toURL(),
+                new URL("http://" + PropertiesContext.getInstance().getProperty("selenoid.url") + ":4444/wd/hub"),
                 desiredCapabilities
         );
         remoteDriver.manage().window().setSize(new Dimension(1920, 1080));
