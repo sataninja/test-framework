@@ -25,7 +25,7 @@ public class WebDriverFactory {
     private static Browser browser = Browser.toEnum(propertiesContext.getProperty("browser"));
     private WebDriver webDriver;
 
-    public synchronized void setWebDriver() throws Exception {
+    public void setWebDriver() throws Exception {
         if (isBrowserStack()) {
             webDriver = BrowserstackDriver.createBrowserStackDriver();
         } else if (propertiesContext.getProperty("selenoid.run").equalsIgnoreCase("true") &&
@@ -66,7 +66,7 @@ public class WebDriverFactory {
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
     }
 
-    public synchronized void closeWebDriver() {
+    public void closeWebDriver() {
         if (webDriver != null) webDriver.close();
     }
 }
