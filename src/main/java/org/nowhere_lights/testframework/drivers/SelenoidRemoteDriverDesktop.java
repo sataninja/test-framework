@@ -12,7 +12,7 @@ import java.net.URI;
 
 public class SelenoidRemoteDriverDesktop {
 
-    public static synchronized WebDriver createRemoteWebDriver() {
+    public static WebDriver createRemoteWebDriver() throws MalformedURLException {
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         if (PropertiesContext.getInstance().getProperty("browser") != null)
             desiredCapabilities.setBrowserName(PropertiesContext.getInstance().getProperty("browser"));
@@ -23,16 +23,12 @@ public class SelenoidRemoteDriverDesktop {
         desiredCapabilities.setCapability("enableVideo", false);
 //        desiredCapabilities.setCapability(CapabilityType.PROXY, ProxyProvider.getSeleniumProxy());
 
-        try {
-            RemoteWebDriver remoteDriver = new RemoteWebDriver(
-                    URI.create("http://" + PropertiesContext.getInstance().getProperty("selenoid.url") + ":4444/wd/hub").toURL(),
-                    desiredCapabilities
-            );
-            remoteDriver.manage().window().setSize(new Dimension(1920, 1080));
-            remoteDriver.setFileDetector(new LocalFileDetector());
-            return remoteDriver;
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
+        RemoteWebDriver remoteDriver = new RemoteWebDriver(
+                URI.create("http://" + PropertiesContext.getInstance().getProperty("selenoid.url") + ":4444/wd/hub").toURL(),
+                desiredCapabilities
+        );
+        remoteDriver.manage().window().setSize(new Dimension(1920, 1080));
+        remoteDriver.setFileDetector(new LocalFileDetector());
+        return remoteDriver;
     }
 }
