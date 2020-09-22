@@ -21,7 +21,7 @@ public class ChromeDriverDesktop {
 //        return new ChromeDriver(desiredCapabilities);
 //    }
 
-    public synchronized static ChromeOptions getChromeOptions() {
+    public static ChromeOptions getChromeOptions() {
         String downloadFilepath = System.getProperty("user.dir") + "/downloadedFiles";
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--disable-notifications");
