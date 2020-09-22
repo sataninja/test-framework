@@ -55,7 +55,7 @@ public abstract class BaseTest {
     }
 
     @BeforeSuite
-    public synchronized void beforeSuite(final ITestContext context) {
+    public void beforeSuite(final ITestContext context) {
         if (RETRY_ON)
             for (ITestNGMethod method : context.getAllTestMethods())
                 method.setRetryAnalyzer(new RetryAnalyzer());
@@ -72,7 +72,7 @@ public abstract class BaseTest {
     }
 
     @BeforeClass
-    public synchronized static void connectToEmail() {
+    public static void connectToEmail() {
         try {
             if (EMAIL_USERNAME != null && EMAIL_PASSWORD != null && EMAIL_SMTP_HOST != null)
                 emailUtils = new EmailUtils(EMAIL_USERNAME, EMAIL_PASSWORD, EMAIL_SMTP_HOST, EmailUtils.EmailFolder.INBOX);
@@ -93,7 +93,7 @@ public abstract class BaseTest {
      * </p>
      */
     @BeforeMethod(alwaysRun = true)
-    public synchronized void beforeMethod(final ITestContext testContext, ITestResult testResult) throws Exception {
+    public void beforeMethod(final ITestContext testContext, ITestResult testResult) throws Exception {
         _logger.info("<br>Starting test: " + testContext.getName());
         _logger.info("<br>****************************************************");
         if (isBrowserStack()) {
@@ -108,7 +108,7 @@ public abstract class BaseTest {
     }
 
     @AfterMethod(alwaysRun = true)
-    public synchronized void afterMethod(final ITestContext testContext, ITestResult iTestResult) throws Exception {
+    public void afterMethod(final ITestContext testContext, ITestResult iTestResult) throws Exception {
         _logger.info("<br>Completed test method " + iTestResult.getName());
         _logger.info("<br>****************************************************");
         _logger.info("<br>Time taken by method " + iTestResult.getName() + ": " + (iTestResult.getEndMillis() - iTestResult.getStartMillis()) / 1000 + "sec");
@@ -118,7 +118,7 @@ public abstract class BaseTest {
     }
 
     @AfterSuite
-    public synchronized void afterSuite(final ITestContext iTestContext) {
+    public void afterSuite(final ITestContext iTestContext) {
         String suiteName = iTestContext.getSuite().getName();
         suiteStop = System.currentTimeMillis();
         elapsedTime = (suiteStop - suiteStart) / 1000;
