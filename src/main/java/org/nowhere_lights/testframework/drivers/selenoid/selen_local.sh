@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 curl -s https://aerokube.com/cm/bash | bash \
-    && ./cm selenoid start --force --vnc --tmpfs 256 --args '-limit 10' --browsers 'chrome;firefox' --last-versions 2 \
+    && ./cm selenoid start --force --vnc --tmpfs 256 --args '-limit 10; -session-attempt-timeout 1m; -timeout 1m' --browsers 'chrome;firefox' --last-versions 2 \
     && ./cm selenoid-ui start --port 666
 
 #docker pull selenoid/vnc_chrome:76.0

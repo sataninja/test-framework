@@ -23,8 +23,8 @@ public class SelenoidRemoteDriverDesktop {
         desiredCapabilities.setCapability("enableVideo", false);
 //        desiredCapabilities.setCapability(CapabilityType.PROXY, ProxyProvider.getSeleniumProxy());
 
-        RemoteWebDriver remoteDriver = null;
-        remoteDriver = new RemoteWebDriver(
+//        RemoteWebDriver remoteDriver;
+        RemoteWebDriver remoteDriver = new RemoteWebDriver(
                 URI.create("http://" + PropertiesContext.getInstance().getProperty("selenoid.url") + ":4444/wd/hub").toURL(),
                 desiredCapabilities
         );

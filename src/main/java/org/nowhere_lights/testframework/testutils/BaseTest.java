@@ -1,5 +1,6 @@
 package org.nowhere_lights.testframework.testutils;
 
+import com.codeborne.selenide.drivercommands.WebDriverWrapper;
 import com.codeborne.selenide.testng.GlobalTextReport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -104,23 +105,6 @@ public abstract class BaseTest {
             }
         }
         webDriverFactory.setWebDriver();
-        //pages initialize
-//        for (Map.Entry<String, String> pageEntry : pageNames.entrySet()) {
-//            try {
-//                Class<?> clazz = Class.forName(pageEntry.getValue());
-//                Constructor<?> constructor = clazz.getConstructor(WebDriver.class);
-//                BasePage page = (BasePage) constructor.newInstance(getDriver());
-//                pages.put(pageEntry.getKey(), page);
-//            } catch (InstantiationException |
-//                    InvocationTargetException |
-//                    NoSuchMethodException |
-//                    IllegalAccessException |
-//                    ClassNotFoundException e) {
-//                _logger.warn("Couldn't initialize page: " +
-//                        pageEntry.getKey(), pageEntry.getValue(), e.getCause());
-//                e.printStackTrace();
-//            }
-//        }
         softAssert = SoftAssert.getInstance(getDriver());
     }
 
