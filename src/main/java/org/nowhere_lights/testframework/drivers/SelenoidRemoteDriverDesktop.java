@@ -1,6 +1,5 @@
 package org.nowhere_lights.testframework.drivers;
 
-import com.codeborne.selenide.WebDriverProvider;
 import org.nowhere_lights.testframework.drivers.utils.PropertiesContext;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
@@ -11,55 +10,28 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.net.MalformedURLException;
 import java.net.URI;
 
-public class SelenoidRemoteDriverDesktop implements WebDriverProvider{
+public class SelenoidRemoteDriverDesktop {
 
-//    public static WebDriver createRemoteWebDriver() throws MalformedURLException {
-//        DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-//        if (PropertiesContext.getInstance().getProperty("browser") != null)
-//            desiredCapabilities.setBrowserName(PropertiesContext.getInstance().getProperty("browser"));
-//        else desiredCapabilities.setBrowserName("chrome");
-//        if (PropertiesContext.getInstance().getProperty("browser.version") != null)
-//            desiredCapabilities.setVersion(PropertiesContext.getInstance().getProperty("browser.version"));
-//        desiredCapabilities.setCapability("enableVNC", true);
-//        desiredCapabilities.setCapability("enableVideo", false);
-////        desiredCapabilities.setCapability(CapabilityType.PROXY, ProxyProvider.getSeleniumProxy());
-//
-//        RemoteWebDriver remoteDriver;
-//         remoteDriver = new RemoteWebDriver(
-//                URI.create("http://" + PropertiesContext.getInstance().getProperty("selenoid.url") + ":4444/wd/hub")
-//                        .toURL(),
-//                desiredCapabilities
-//        );
-//        remoteDriver.manage().window().setSize(new Dimension(1920, 1080));
-//        remoteDriver.setFileDetector(new LocalFileDetector());
-//
-//        return remoteDriver;
-//    }
-
-    @Override
-    public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
-//        if (PropertiesContext.getInstance().getProperty("browser") != null)
-//            desiredCapabilities.setBrowserName(PropertiesContext.getInstance().getProperty("browser"));
-//        else desiredCapabilities.setBrowserName("chrome");
-//        if (PropertiesContext.getInstance().getProperty("browser.version") != null)
-//            desiredCapabilities.setVersion(PropertiesContext.getInstance().getProperty("browser.version"));
-//        desiredCapabilities.setCapability("enableVNC", true);
-//        desiredCapabilities.setCapability("enableVideo", false);
+    public static WebDriver createRemoteWebDriver() throws MalformedURLException {
+        DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+        if (PropertiesContext.getInstance().getProperty("browser") != null)
+            desiredCapabilities.setBrowserName(PropertiesContext.getInstance().getProperty("browser"));
+        else desiredCapabilities.setBrowserName("chrome");
+        if (PropertiesContext.getInstance().getProperty("browser.version") != null)
+            desiredCapabilities.setVersion(PropertiesContext.getInstance().getProperty("browser.version"));
+        desiredCapabilities.setCapability("enableVNC", true);
+        desiredCapabilities.setCapability("enableVideo", false);
 //        desiredCapabilities.setCapability(CapabilityType.PROXY, ProxyProvider.getSeleniumProxy());
 
-        RemoteWebDriver remoteDriver = null;
-        try {
-            remoteDriver = new RemoteWebDriver(
-                    URI.create("http://" + PropertiesContext.getInstance().getProperty("selenoid.url") + ":4444/wd/hub")
-                            .toURL(),
-                    desiredCapabilities
-            );
-        } catch (MalformedURLException exception) {
-            exception.printStackTrace();
-        }
-        remoteDriver.manage().window().setSize(new Dimension(1920, 1080));
+        RemoteWebDriver remoteDriver = new RemoteWebDriver(
+                URI.create("http://" + PropertiesContext.getInstance().getProperty("selenoid.url") + ":4444/wd/hub")
+                        .toURL(),
+                desiredCapabilities
+        );
         remoteDriver.setFileDetector(new LocalFileDetector());
+        remoteDriver.manage().window().setSize(new Dimension(1920, 1080));
 
         return remoteDriver;
     }
+
 }

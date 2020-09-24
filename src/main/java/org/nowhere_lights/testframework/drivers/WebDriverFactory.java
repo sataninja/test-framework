@@ -13,7 +13,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static org.nowhere_lights.testframework.drivers.BrowserstackDriver.isBrowserStack;
 
@@ -32,16 +31,7 @@ public class WebDriverFactory {
         } else if (propertiesContext.getProperty("selenoid.run").equalsIgnoreCase("true") &&
                 propertiesContext.getProperty("selenoid.url") != null) {
             _logger.info("Starting selenoid driver...");
-//            webDriver = SelenoidRemoteDriverDesktop.createRemoteWebDriver();
-            DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-            if (PropertiesContext.getInstance().getProperty("browser") != null)
-                desiredCapabilities.setBrowserName(PropertiesContext.getInstance().getProperty("browser"));
-            else desiredCapabilities.setBrowserName("chrome");
-            if (PropertiesContext.getInstance().getProperty("browser.version") != null)
-                desiredCapabilities.setVersion(PropertiesContext.getInstance().getProperty("browser.version"));
-            desiredCapabilities.setCapability("enableVNC", true);
-            desiredCapabilities.setCapability("enableVideo", false);
-            webDriver = new SelenoidRemoteDriverDesktop().createDriver(desiredCapabilities);
+            webDriver = SelenoidRemoteDriverDesktop.createRemoteWebDriver();
         } else {
             _logger.info("SETTING DESKTOP DRIVER!");
             if (browser == Browser.CHROME) {
