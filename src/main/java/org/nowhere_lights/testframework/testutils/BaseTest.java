@@ -1,7 +1,5 @@
 package org.nowhere_lights.testframework.testutils;
 
-import com.codeborne.selenide.drivercommands.WebDriverWrapper;
-import com.codeborne.selenide.testng.GlobalTextReport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.nowhere_lights.testframework.drivers.BrowserstackDriver;
@@ -24,7 +22,7 @@ import java.util.Map;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.nowhere_lights.testframework.drivers.BrowserstackDriver.isBrowserStack;
 
-@Listeners({TestMethodListener.class, GlobalTextReport.class, TestListener.class})
+@Listeners({TestMethodListener.class, TestListener.class})
 public abstract class BaseTest {
 
     private static PropertiesContext propertiesContext = PropertiesContext.getInstance();

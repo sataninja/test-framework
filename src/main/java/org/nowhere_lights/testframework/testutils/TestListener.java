@@ -1,8 +1,10 @@
 package org.nowhere_lights.testframework.testutils;
 
 
+import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.testng.ScreenShooter;
 import org.nowhere_lights.testframework.drivers.utils.ReportURL;
+import org.nowhere_lights.testframework.testutils.allure.AllureSelenide;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import org.testng.*;
@@ -28,6 +30,7 @@ public class TestListener extends TestListenerAdapter {
     @Override
     public void onTestSuccess(ITestResult result) {
         Reporter.log("Test " + result.getName() + " has passed!!!", true);
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
     }
 
     @Override
@@ -49,6 +52,7 @@ public class TestListener extends TestListenerAdapter {
                 + "\" height=\"" + SNAPSHOT_HEIGHT
                 + "\" width=\"" + SNAPSHOT_WIDTH + "\">", 1, true);
         Reporter.setCurrentTestResult(null);
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
     }
 
     @Override
