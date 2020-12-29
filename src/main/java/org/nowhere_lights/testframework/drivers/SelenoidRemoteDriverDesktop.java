@@ -24,7 +24,7 @@ public class SelenoidRemoteDriverDesktop {
 //        desiredCapabilities.setCapability(CapabilityType.PROXY, ProxyProvider.getSeleniumProxy());
 
         RemoteWebDriver remoteDriver = new RemoteWebDriver(
-                URI.create("http://" + PropertiesContext.getInstance().getProperty("selenoid.url") + ":4444/wd/hub")
+                URI.create(PropertiesContext.getInstance().getProperty("selenoid.url"))
                         .toURL(),
                 desiredCapabilities
         );
