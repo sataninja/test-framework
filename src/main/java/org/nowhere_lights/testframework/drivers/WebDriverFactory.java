@@ -67,6 +67,9 @@ public class WebDriverFactory {
     }
 
     public void closeWebDriver() {
-        if (webDriver != null) webDriver.close();
+        if (webDriver != null) {
+          webDriver.close();
+          webDriver.quit();
+        }
     }
 }
